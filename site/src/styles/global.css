@@ -1125,6 +1125,10 @@ main {
 .layer-b code.formula { display: block; width: max-content; max-width: 100%; margin: 1em auto; padding: 0.7em 1em; white-space: pre-wrap; text-align: center; }
 .layer-b a { color: #9fc0d4; }
 
+/* inline KaTeX lifted out of `code` spans — keep each equation on one line */
+.math-inline { white-space: nowrap; }
+.math-inline .katex { font-size: 1.04em; }
+
 /* english deep read */
 .deepread-head { display: flex; align-items: center; gap: 0.7rem; margin: 1.7rem 0 1rem; color: var(--cool-soft); }
 .deepread-head .line { flex: 1; height: 1px; background: rgba(255, 255, 255, 0.14); }
