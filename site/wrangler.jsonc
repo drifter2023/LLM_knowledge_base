@@ -1,0 +1,12 @@
+{
+  "name": "llm-knowledge-base",
+  "compatibility_date": "2026-06-01",
+  "main": "worker/index.ts",
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "not_found_handling": "404-page"
+  }
+  // Secret (set with `wrangler secret put ANTHROPIC_API_KEY`) powers /api/ask.
+  // Optional model override: add  "vars": { "ASK_MODEL": "claude-haiku-4-5" }
+}

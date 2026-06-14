@@ -1,0 +1,31 @@
+---
+import { getCollection } from 'astro:content';
+import { clusters } from '../data/clusters';
+import { runConsistencyChecks } from '../lib/checks';
+import Base from '../layouts/Base.astro';
+import KnowledgeMap from '../components/KnowledgeMap.astro';
+
+const entries = await getCollection('stories');
+
+// Chunk-1 consistency checks (build fails if content drifts)
+runConsistencyChecks(entries, clusters);
+---
+
+<Base title="寓言集 · LLM Parables" description="百篇中文寓言，照亮一百个大语言模型核心概念。先读故事，再揭晓概念。">
+  <section class="home-hero">
+    <p class="home-eyebrow">先读故事 · 再揭晓概念</p>
+    <h1>寓言集 <span class="en">LLM Parables</span></h1>
+    <p class="sub">百篇中文寓言，照亮一百个大语言模型核心概念。读完一篇，看版图被点亮。</p>
+  </section>
+
+  <KnowledgeMap />
+
+  <section class="keepgoing">
+    <p class="keepgoing-h">继续学习 · Keep going</p>
+    <div class="mstrip" id="mstrip"></div>
+  </section>
+</Base>
+
+<script>
+  import '../scripts/home';
+</script>

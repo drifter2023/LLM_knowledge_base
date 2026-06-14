@@ -1,0 +1,53 @@
+---
+import { clusters } from '../data/clusters';
+
+// Each story is an anonymous "pip" — no concept names ship to the client, so
+// the map can't spoiler an unread story. Read-state, the recommended "next"
+// pip, and per-row counts are all painted client-side from localStorage by
+// src/scripts/home.ts using the data- attributes below.
+const priColor: Record<string, string> = {
+  P0: 'var(--p0)', P1: 'var(--p1)', P2: 'var(--p2)', P3: 'var(--p3)',
+};
+const total = clusters.reduce((n, c) => n + c.storyOrder.length, 0);
+---
+
+<section class="map-card">
+  <div class="map-top">
+    <h2>我的知识版图</h2>
+    <span class="count"><b id="map-count">0</b> / {total}</span>
+  </div>
+  <div class="persona-bar">
+    <p class="persona-h">选择身份 · 高亮与你相关的故事</p>
+    <div class="pbtns" id="persona-bar"></div>
+  </div>
+  <div class="map-legend">
+    <span><i class="lg next"></i>下一篇</span>
+    <span><i class="lg read"></i>已读</span>
+    <span><i class="lg"></i>未读</span>
+    <span class="legend-rel"><i class="lg rel"></i>与你相关</span>
+  </div>
+  <div class="map-body">
+    {clusters.map((c) => (
+      <div class="km-row" data-cluster={c.slug}>
+        <div class="km-name">
+          <span class="pri-dot" style={`background:${priColor[c.priority]}`}></span>
+          <a href={`/clusters/${c.slug}/`}>{c.zh}</a>
+        </div>
+        <div class="km-pips">
+          {c.storyOrder.map((id, i) => (
+            <a
+              class="pip"
+              href={`/stories/${c.slug}/${i + 1}/`}
+              data-story-id={id}
+              data-cluster={c.slug}
+              data-n={i + 1}
+              title={`故事 #${i + 1}`}
+              aria-label={`${c.zh} · 故事 #${i + 1}`}
+            ></a>
+          ))}
+        </div>
+        <div class="km-ct"><b class="km-read">0</b>/{c.storyOrder.length}</div>
+      </div>
+    ))}
+  </div>
+</section>

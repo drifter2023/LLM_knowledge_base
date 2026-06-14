@@ -1,0 +1,17 @@
+---
+export interface Props {
+  priority: 'P0' | 'P1' | 'P2' | 'P3';
+}
+
+const { priority } = Astro.props;
+
+const titles: Record<string, string> = {
+  P0: 'P0 必须深入',
+  P1: 'P1 强烈推荐',
+  P2: 'P2 了解即可',
+  P3: 'P3 按需查阅',
+};
+---
+<span class={`priority-badge priority-${priority}`} title={titles[priority]}>
+  {priority}
+</span>

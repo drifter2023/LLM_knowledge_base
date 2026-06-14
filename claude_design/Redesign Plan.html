@@ -1,0 +1,730 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>寓言集 · 重新设计方案 / Redesign Plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --paper:#f4efe6;
+  --paper-2:#efe8db;
+  --surface:#e9e0cf;
+  --surface-2:#e2d6c0;
+  --ink:#211c13;
+  --ink-soft:#473e30;
+  --muted:#857a66;
+  --faint:#b8ad97;
+  --line:#dccfb8;
+  --line-strong:#cbbb9e;
+  --terra:#b4522e;
+  --terra-deep:#8f3d1f;
+  --terra-tint:#f0d9cb;
+  /* the "concept" cool ink — the reveal flips temperature */
+  --ink-blue:#16212e;
+  --ink-blue-2:#1f2d3d;
+  --cool:#3f6f8f;
+  --cool-soft:#7fa3b8;
+  --gold:#c08a3e;
+  --p0:#c0392b; --p1:#d97b25; --p2:#3678a3; --p3:#9c8f78;
+  --maxw:62rem;
+  --serif:"Newsreader",Georgia,"Songti SC",serif;
+  --cjk:"Noto Serif SC",serif;
+  --sans:"Noto Sans SC",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:var(--cjk);
+  font-size:17px;line-height:1.75;
+  -webkit-font-smoothing:antialiased;
+  background-image:radial-gradient(circle at 18% -10%, #fbf7ef 0%, transparent 45%),radial-gradient(circle at 100% 0%, #f6f0e4 0%, transparent 40%);
+  background-attachment:fixed;
+}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 1.6rem}
+h1,h2,h3,h4{font-family:var(--serif);font-weight:500;line-height:1.15;letter-spacing:-0.01em}
+.cjk-serif{font-family:var(--cjk)}
+p{margin:0 0 1.05em}
+a{color:var(--terra);text-decoration:none}
+a:hover{text-decoration:underline}
+.eyebrow{font-family:var(--sans);font-size:.72rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--terra);margin:0}
+.muted{color:var(--muted)}
+.tnum{font-variant-numeric:tabular-nums}
+
+/* ── top index bar ── */
+.topbar{position:sticky;top:0;z-index:40;background:color-mix(in srgb,var(--paper) 88%, transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.topbar .wrap{display:flex;align-items:center;justify-content:space-between;height:54px;gap:1rem}
+.brand{font-family:var(--cjk);font-weight:700;font-size:.98rem;letter-spacing:.01em;white-space:nowrap}
+.brand b{color:var(--terra)}
+.topnav{display:flex;gap:1.35rem;font-family:var(--sans);font-size:.8rem;color:var(--muted)}
+.topnav a{color:var(--muted)}
+.topnav a:hover{color:var(--terra);text-decoration:none}
+@media(max-width:720px){.topnav{display:none}}
+
+/* ── cover ── */
+.cover{padding:5.5rem 0 3.5rem;border-bottom:1px solid var(--line)}
+.kicker{display:inline-flex;align-items:center;gap:.6rem;font-family:var(--sans);font-size:.74rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line-strong);border-radius:2rem;padding:.32rem .8rem;margin-bottom:1.6rem}
+.kicker .dot{width:7px;height:7px;border-radius:50%;background:var(--terra)}
+.cover h1{font-size:clamp(2.6rem,6vw,4.4rem);margin:0 0 .4rem;letter-spacing:-0.02em}
+.cover h1 .en{display:block;font-style:italic;font-weight:400;color:var(--muted);font-size:clamp(1.3rem,3vw,2rem);letter-spacing:0}
+.cover .lede{font-family:var(--cjk);font-size:1.18rem;line-height:1.85;color:var(--ink-soft);max-width:40rem;margin-top:1.4rem}
+.cover-meta{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:2rem}
+.chip{font-family:var(--sans);font-size:.78rem;color:var(--ink-soft);background:var(--surface);border:1px solid var(--line);border-radius:.4rem;padding:.34rem .7rem}
+.chip b{color:var(--terra);font-weight:600}
+
+/* ── section scaffolding ── */
+section.block{padding:4.2rem 0;border-bottom:1px solid var(--line)}
+.sec-head{display:flex;align-items:baseline;gap:1rem;margin-bottom:2rem}
+.sec-no{font-family:var(--serif);font-size:1rem;color:var(--terra);font-variant-numeric:tabular-nums;font-weight:600;flex-shrink:0;padding-top:.2rem}
+.sec-head h2{font-size:clamp(1.7rem,3.4vw,2.5rem);margin:0}
+.sec-head .zh{font-family:var(--cjk);font-weight:600}
+.sec-sub{color:var(--muted);font-family:var(--cjk);max-width:42rem;margin:-1rem 0 2.2rem;font-size:1.02rem}
+
+.lead-in{font-size:1.06rem;color:var(--ink-soft);max-width:44rem}
+
+/* ── audit: flow strip ── */
+.flow{display:flex;align-items:stretch;gap:0;flex-wrap:wrap;margin:1.5rem 0 2.4rem;border:1px solid var(--line);border-radius:.7rem;overflow:hidden;background:var(--paper-2)}
+.flow-step{flex:1;min-width:150px;padding:1.1rem 1.15rem;border-right:1px solid var(--line);position:relative}
+.flow-step:last-child{border-right:none}
+.flow-step .n{font-family:var(--sans);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--faint)}
+.flow-step h4{margin:.2rem 0 .35rem;font-size:1.05rem;font-family:var(--cjk);font-weight:600}
+.flow-step p{font-family:var(--sans);font-size:.8rem;color:var(--muted);margin:0;line-height:1.5}
+.flow-step .leak{margin-top:.6rem;font-family:var(--sans);font-size:.74rem;color:var(--terra-deep);display:flex;gap:.35rem;align-items:flex-start}
+.flow-step .leak::before{content:"⚠";color:var(--terra);font-size:.8rem;line-height:1.4}
+
+/* ── audit cards ── */
+.audit-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1.5rem}
+@media(max-width:720px){.audit-grid{grid-template-columns:1fr}.flow-step{border-right:none;border-bottom:1px solid var(--line)}}
+.acard{background:var(--paper-2);border:1px solid var(--line);border-radius:.6rem;padding:1.2rem 1.3rem}
+.acard.keep{border-left:3px solid #5a8a5e}
+.acard.fix{border-left:3px solid var(--terra)}
+.acard h4{margin:0 0 .5rem;font-family:var(--cjk);font-size:1.04rem;font-weight:600;display:flex;align-items:center;gap:.5rem}
+.acard .tag{font-family:var(--sans);font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;font-weight:600;padding:.15rem .45rem;border-radius:.3rem}
+.acard.keep .tag{background:#dfeadf;color:#3f6b44}
+.acard.fix .tag{background:var(--terra-tint);color:var(--terra-deep)}
+.acard ul{margin:.3rem 0 0;padding-left:1.1rem;font-family:var(--sans);font-size:.86rem;color:var(--ink-soft)}
+.acard li{margin-bottom:.4rem}
+
+/* ── reference thumbs ── */
+.refrow{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;margin:1.6rem 0 .5rem}
+@media(max-width:720px){.refrow{grid-template-columns:1fr}}
+.ref{border:1px solid var(--line);border-radius:.5rem;overflow:hidden;background:#fff}
+.ref img{display:block;width:100%;height:200px;object-fit:cover;object-position:top}
+.ref .cap{font-family:var(--sans);font-size:.74rem;color:var(--muted);padding:.55rem .75rem;border-top:1px solid var(--line);background:var(--paper-2)}
+.ref .cap b{color:var(--ink-soft);font-weight:600}
+
+/* ── principles ── */
+.bets{display:grid;grid-template-columns:repeat(2,1fr);gap:1.1rem;margin-top:1.6rem}
+@media(max-width:720px){.bets{grid-template-columns:1fr}}
+.bet{background:var(--paper-2);border:1px solid var(--line);border-radius:.7rem;padding:1.5rem 1.5rem 1.6rem;position:relative;overflow:hidden}
+.bet .bn{font-family:var(--serif);font-size:2.6rem;color:var(--terra-tint);font-weight:600;line-height:1;position:absolute;top:.7rem;right:1rem}
+.bet h4{margin:0 0 .5rem;font-family:var(--cjk);font-size:1.18rem;font-weight:700;max-width:80%}
+.bet p{font-family:var(--sans);font-size:.88rem;color:var(--ink-soft);margin:0;line-height:1.6}
+.bet .en{font-style:italic;color:var(--muted);font-family:var(--serif);font-size:.92rem}
+
+/* ── recommendation theme block ── */
+.theme{margin-top:1rem}
+.theme-head{display:flex;align-items:baseline;gap:.8rem;margin:2.6rem 0 .4rem}
+.theme-head .tn{font-family:var(--sans);font-weight:700;font-size:.8rem;color:#fff;background:var(--terra);border-radius:.35rem;padding:.2rem .5rem;letter-spacing:.04em}
+.theme-head h3{font-family:var(--cjk);font-weight:700;font-size:1.5rem;margin:0}
+.theme-why{font-family:var(--sans);font-size:.92rem;color:var(--ink-soft);max-width:44rem;margin:.5rem 0 1.4rem;border-left:2px solid var(--line-strong);padding-left:.9rem}
+.theme-why b{color:var(--terra-deep)}
+
+/* ── option label ── */
+.opts{display:grid;gap:1.2rem;margin:1.2rem 0}
+.opt{border:1px solid var(--line);border-radius:.8rem;background:var(--paper-2);overflow:hidden}
+.opt-head{display:flex;align-items:center;gap:.7rem;padding:.85rem 1.1rem;border-bottom:1px solid var(--line);background:var(--surface)}
+.opt-head .badge{font-family:var(--sans);font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#fff;background:var(--ink-soft);border-radius:.3rem;padding:.22rem .55rem}
+.opt-head .badge.pick{background:var(--terra)}
+.opt-head h4{font-family:var(--cjk);font-weight:600;font-size:1.02rem;margin:0}
+.opt-head .role{font-family:var(--sans);font-size:.78rem;color:var(--muted);margin-left:auto}
+.opt-body{padding:1.4rem}
+.opt-note{font-family:var(--sans);font-size:.84rem;color:var(--ink-soft);padding:0 1.4rem 1.3rem;margin-top:-.4rem}
+.opt-note b{color:var(--terra-deep);font-weight:600}
+
+/* ════ MOCKUP PRIMITIVES ════ */
+.mock{font-family:var(--cjk);color:var(--ink)}
+.mock-frame{background:var(--paper);border:1px solid var(--line-strong);border-radius:.6rem;box-shadow:0 1px 0 #fff inset,0 10px 30px -18px rgba(60,40,20,.5);overflow:hidden}
+.mock-bar{display:flex;align-items:center;gap:.4rem;padding:.5rem .75rem;border-bottom:1px solid var(--line);background:var(--surface)}
+.mock-bar .d{width:9px;height:9px;border-radius:50%;background:var(--line-strong)}
+.mock-bar .u{margin-left:.5rem;font-family:var(--sans);font-size:.7rem;color:var(--muted)}
+
+/* knowledge map mockup */
+.kmap{padding:1.3rem 1.4rem}
+.kmap .kmap-h{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:.2rem}
+.kmap .kmap-h h5{font-family:var(--cjk);font-weight:700;font-size:1.15rem;margin:0}
+.kmap .kmap-h .big{font-family:var(--serif);font-weight:600;font-variant-numeric:tabular-nums}
+.kmap .kmap-h .big b{color:var(--terra);font-size:1.5rem}
+.kmap .sub{font-family:var(--sans);font-size:.78rem;color:var(--muted);margin:0 0 1rem}
+.km-cluster{display:grid;grid-template-columns:8.5rem 1fr auto;align-items:center;gap:.8rem;padding:.42rem 0;border-top:1px dashed var(--line)}
+.km-cluster:first-of-type{border-top:none}
+.km-name{font-family:var(--cjk);font-size:.86rem;font-weight:500;display:flex;align-items:center;gap:.4rem;line-height:1.2}
+.km-name .pri{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.km-pips{display:flex;gap:4px;flex-wrap:wrap}
+.pip{width:13px;height:13px;border-radius:3px;border:1.5px solid var(--line-strong);background:transparent}
+.pip.on{background:var(--terra);border-color:var(--terra)}
+.pip.next{border-color:var(--terra);border-style:dashed;box-shadow:0 0 0 2px var(--terra-tint)}
+.km-ct{font-family:var(--sans);font-size:.74rem;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap;text-align:right}
+.km-ct b{color:var(--ink-soft)}
+
+/* constellation (option B) */
+.constel{display:grid;grid-template-columns:repeat(20,1fr);gap:5px;padding:1.3rem 1.4rem}
+.cnode{aspect-ratio:1;border-radius:2px;background:var(--surface-2)}
+.legend{display:flex;gap:1.2rem;flex-wrap:wrap;font-family:var(--sans);font-size:.74rem;color:var(--muted);padding:0 1.4rem 1.2rem}
+.legend span{display:inline-flex;align-items:center;gap:.4rem}
+.legend i{width:12px;height:12px;border-radius:3px;display:inline-block}
+
+/* momentum strip */
+.mstrip{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:.8rem;padding:1.3rem 1.4rem}
+@media(max-width:720px){.mstrip{grid-template-columns:1fr}}
+.mtile{background:var(--paper-2);border:1px solid var(--line);border-radius:.55rem;padding:1rem 1.1rem}
+.mtile.resume{background:linear-gradient(180deg,var(--ink-blue),var(--ink-blue-2));color:#f0ead9;border-color:var(--ink-blue)}
+.mtile .lab{font-family:var(--sans);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0 0 .4rem}
+.mtile.resume .lab{color:var(--cool-soft)}
+.mtile .big{font-family:var(--serif);font-weight:600;font-size:1.7rem;font-variant-numeric:tabular-nums;line-height:1.1}
+.mtile.resume h5{font-family:var(--cjk);font-weight:600;font-size:1.08rem;margin:.1rem 0 .55rem}
+.mtile.resume .go{display:inline-flex;align-items:center;gap:.35rem;font-family:var(--sans);font-size:.82rem;font-weight:600;background:var(--terra);color:#fff;border-radius:.4rem;padding:.4rem .8rem}
+.streak-dots{display:flex;gap:5px;margin-top:.5rem}
+.streak-dots i{width:14px;height:14px;border-radius:50%;background:var(--surface-2);display:inline-block}
+.streak-dots i.on{background:var(--terra)}
+.streak-dots i.today{background:var(--gold);box-shadow:0 0 0 3px color-mix(in srgb,var(--gold) 30%,transparent)}
+
+/* reveal-loop mockup — story (warm) → concept (cool) */
+.loop{display:grid;grid-template-columns:1fr 1fr;gap:0}
+@media(max-width:720px){.loop{grid-template-columns:1fr}}
+.loop-side{padding:1.4rem 1.5rem}
+.loop-side.story{border-right:1px solid var(--line)}
+.loop-side.concept{background:linear-gradient(180deg,var(--ink-blue),#101924);color:#ece4d3}
+@media(max-width:720px){.loop-side.story{border-right:none;border-bottom:1px solid var(--line)}}
+.loop-tag{font-family:var(--sans);font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;font-weight:600;margin:0 0 .7rem;display:flex;align-items:center;gap:.4rem}
+.loop-side.story .loop-tag{color:var(--terra)}
+.loop-side.concept .loop-tag{color:var(--cool-soft)}
+.parable-demo{font-family:var(--cjk);font-size:.92rem;line-height:1.95;color:var(--ink-soft);text-indent:2em}
+.guess{margin-top:1.1rem;border-top:1px dashed var(--line-strong);padding-top:1rem}
+.guess .q{font-family:var(--cjk);font-size:.86rem;font-weight:600;margin:0 0 .6rem}
+.guess-chips{display:flex;flex-wrap:wrap;gap:.45rem}
+.gchip{font-family:var(--sans);font-size:.78rem;border:1px solid var(--line-strong);border-radius:2rem;padding:.32rem .75rem;color:var(--ink-soft);background:var(--paper)}
+.gchip.sel{border-color:var(--terra);background:var(--terra-tint);color:var(--terra-deep);font-weight:600}
+.concept-name{font-family:var(--serif);font-weight:600;font-size:1.4rem;color:#e9b489;margin:.1rem 0 .1rem}
+.concept-name .zh{font-family:var(--cjk);font-size:.95rem;color:var(--cool-soft);font-weight:400;display:block;margin-top:.15rem}
+.bridge{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-left:3px solid var(--gold);border-radius:.4rem;padding:.7rem .85rem;font-family:var(--sans);font-size:.82rem;line-height:1.55;margin:.9rem 0}
+.bridge b{color:var(--gold)}
+.layers{margin-top:.4rem}
+.layer{border-top:1px solid rgba(255,255,255,.12);padding:.6rem 0}
+.layer:first-child{border-top:none}
+.layer .lh{display:flex;align-items:center;justify-content:space-between;font-family:var(--sans);font-size:.78rem;font-weight:600;color:#d7cdb8}
+.layer .lh .pill{font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;color:var(--cool-soft);border:1px solid rgba(127,163,184,.4);border-radius:1rem;padding:.1rem .45rem;font-weight:600}
+.layer p{font-family:var(--sans);font-size:.8rem;color:#b9b09c;margin:.4rem 0 0;line-height:1.55}
+.layer.collapsed p{display:none}
+.layer.collapsed .lh .pill::after{content:" +"}
+
+/* home hero mockup */
+.homehero{padding:1.5rem 1.6rem;background:linear-gradient(180deg,var(--paper-2),var(--paper))}
+.hh-title{font-family:var(--serif);font-size:1.7rem;font-weight:600;margin:.1rem 0 .2rem}
+.hh-title .zh{font-family:var(--cjk);font-weight:700}
+.hh-sub{font-family:var(--sans);font-size:.84rem;color:var(--muted);margin:0 0 1.1rem}
+.path{display:flex;align-items:center;gap:.55rem;flex-wrap:wrap;margin-top:1rem}
+.path .step{display:inline-flex;align-items:center;gap:.45rem;background:var(--paper);border:1px solid var(--line-strong);border-radius:2rem;padding:.35rem .8rem;font-family:var(--sans);font-size:.8rem;color:var(--ink-soft)}
+.path .step .pri{width:7px;height:7px;border-radius:50%}
+.path .arrow{color:var(--faint)}
+.path .step.done{background:var(--terra-tint);border-color:var(--terra);color:var(--terra-deep)}
+
+/* onboarding 3-step */
+.steps3{display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem;padding:1.4rem}
+@media(max-width:720px){.steps3{grid-template-columns:1fr}}
+.s3{background:var(--paper-2);border:1px solid var(--line);border-radius:.55rem;padding:1.1rem}
+.s3 .num{font-family:var(--serif);font-weight:600;color:var(--terra);font-size:1.5rem;line-height:1}
+.s3 h6{font-family:var(--cjk);font-weight:700;font-size:1rem;margin:.5rem 0 .3rem}
+.s3 p{font-family:var(--sans);font-size:.8rem;color:var(--muted);margin:0;line-height:1.5}
+
+/* type evolution */
+.typ{display:grid;grid-template-columns:1fr 1fr;gap:1rem;padding:1.4rem}
+@media(max-width:720px){.typ{grid-template-columns:1fr}}
+.typ-col{background:var(--paper-2);border:1px solid var(--line);border-radius:.5rem;padding:1.1rem 1.2rem}
+.typ-col .lab{font-family:var(--sans);font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0 0 .7rem}
+.swatches{display:flex;gap:.5rem;margin-top:.9rem}
+.sw{flex:1;border-radius:.4rem;height:46px;border:1px solid rgba(0,0,0,.06);display:flex;align-items:flex-end;padding:.25rem .35rem;font-family:var(--sans);font-size:.6rem;color:rgba(255,255,255,.85)}
+
+/* roadmap */
+.road{margin-top:1.6rem;display:grid;gap:.9rem}
+.phase{display:grid;grid-template-columns:auto 1fr;gap:1.1rem;align-items:start;background:var(--paper-2);border:1px solid var(--line);border-radius:.7rem;padding:1.2rem 1.4rem}
+.phase .ph-no{font-family:var(--serif);font-weight:600;font-size:1.1rem;color:#fff;background:var(--terra);border-radius:.4rem;width:2.3rem;height:2.3rem;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.phase.p2 .ph-no{background:var(--cool)}
+.phase.p3 .ph-no{background:var(--ink-soft)}
+.phase h4{font-family:var(--cjk);font-weight:700;font-size:1.12rem;margin:0 0 .15rem}
+.phase .when{font-family:var(--sans);font-size:.74rem;letter-spacing:.04em;color:var(--muted);text-transform:uppercase}
+.phase ul{margin:.6rem 0 0;padding-left:1.1rem;font-family:var(--sans);font-size:.86rem;color:var(--ink-soft);columns:2;column-gap:1.6rem}
+@media(max-width:720px){.phase ul{columns:1}}
+.phase li{margin-bottom:.35rem;break-inside:avoid}
+
+/* metric callouts */
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:.8rem;margin-top:1.8rem}
+@media(max-width:720px){.metrics{grid-template-columns:repeat(2,1fr)}}
+.metric{background:var(--paper-2);border:1px solid var(--line);border-radius:.6rem;padding:1.1rem}
+.metric .v{font-family:var(--serif);font-weight:600;font-size:1.35rem;color:var(--terra-deep)}
+.metric .k{font-family:var(--sans);font-size:.76rem;color:var(--muted);margin-top:.2rem}
+
+footer.foot{padding:3rem 0 4rem;text-align:center;color:var(--muted);font-family:var(--sans);font-size:.82rem}
+footer.foot .em{font-family:var(--serif);font-style:italic;color:var(--ink-soft);font-size:1.05rem;display:block;margin-bottom:.6rem}
+
+.callout{background:var(--terra-tint);border:1px solid color-mix(in srgb,var(--terra) 30%,var(--line));border-radius:.6rem;padding:1.1rem 1.3rem;font-family:var(--sans);font-size:.9rem;color:var(--terra-deep);margin:1.6rem 0}
+.callout b{font-weight:700}
+hr.soft{border:none;border-top:1px solid var(--line);margin:2.4rem 0}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap">
+    <span class="brand">寓言集 · <b>Redesign</b></span>
+    <nav class="topnav">
+      <a href="#audit">现状</a>
+      <a href="#bets">主张</a>
+      <a href="#momentum">动力系统</a>
+      <a href="#loop">学习闭环</a>
+      <a href="#home">首页</a>
+      <a href="#road">路线图</a>
+    </nav>
+  </div>
+</div>
+
+<!-- ════════ COVER ════════ -->
+<header class="cover">
+  <div class="wrap">
+    <span class="kicker"><span class="dot"></span>UI &amp; 流程优化方案 · for 寓言集 LLM Parables</span>
+    <h1>把"读完"<br>变成"上瘾"<span class="en">A plan to make 100 concepts impossible to put down</span></h1>
+    <p class="lede">现在的站点已经有一个迷人的灵魂——<b>先读寓言，再揭晓概念</b>。这份方案不推翻它，而是为它装上"动力系统"：让初学者每一次打开都看见自己走了多远，每一篇都更想读下一篇，并且真正记得住。</p>
+    <div class="cover-meta">
+      <span class="chip">目标 · <b>留存 + 黏性</b></span>
+      <span class="chip">读者 · <b>中文 ML 初学者</b></span>
+      <span class="chip">重点 · <b>进度与动力</b></span>
+      <span class="chip">尺度 · <b>可大胆重构</b></span>
+      <span class="chip">交付 · <b>方案 + 多个选项</b></span>
+    </div>
+  </div>
+</header>
+
+<!-- ════════ 0 · THE LENS ════════ -->
+<section class="block" id="lens">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-no">00</span><h2><span class="zh">视角</span> · The lens I optimized through</h2></div>
+    <p class="lead-in">每条建议都问同一个问题：<b>它会让一个初学者多读一篇、并且记得更牢吗？</b>留存与黏性不是装饰——它们来自三个被反复验证的学习行为：看得见的进度、主动回忆、以及降低"下一步"的门槛。下面的优化全部围绕这三点。</p>
+    <div class="metrics">
+      <div class="metric"><div class="v">100</div><div class="k">篇故事 / 12 概念群 —— 一块需要"被填满"的版图</div></div>
+      <div class="metric"><div class="v">1 → 2</div><div class="k">现在的核心问题：读完第一篇后，没有理由读第二篇</div></div>
+      <div class="metric"><div class="v">被动 → 主动</div><div class="k">"揭晓"是被动消费；改成"先猜后揭"即触发主动回忆</div></div>
+      <div class="metric"><div class="v">0 反馈</div><div class="k">读完一篇后没有成就反馈、没有里程碑、没有明天再来的钩子</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ 1 · AUDIT ════════ -->
+<section class="block" id="audit">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-no">01</span><h2><span class="zh">现状审计</span> · What works, what leaks</h2></div>
+    <p class="sec-sub">先沿着真实路径走一遍：首页 → 概念群 → 故事 → 揭晓 → 下一步。每一格下方标出"流失点"——读者在这里失去继续下去的动力。</p>
+
+    <div class="flow">
+      <div class="flow-step"><span class="n">Step 1 · 首页</span><h4>12 张概念群卡片</h4><p>Hero + 全局进度条 + 概念群网格。信息清楚。</p><div class="leak">没有"从哪开始"，初学者面对 12 个陌生术语群会犹豫</div></div>
+      <div class="flow-step"><span class="n">Step 2 · 概念群</span><h4>故事列表</h4><p>概念名隐藏为 · · · 直到读过，保护悬念。</p><div class="leak">一列几乎相同的"故事 #N"，无法预判、无法选择</div></div>
+      <div class="flow-step"><span class="n">Step 3 · 故事</span><h4>寓言正文（衬线）</h4><p>排版优雅，沉浸感强。</p><div class="leak">读者被动地等"揭晓"，大脑没有先做预测</div></div>
+      <div class="flow-step"><span class="n">Step 4 · 揭晓</span><h4>概念长文 + 公式</h4><p>内容扎实、专业。</p><div class="leak">对初学者是"一堵墙"：没有一句话摘要、没有故事↔概念的对照</div></div>
+      <div class="flow-step"><span class="n">Step 5 · 之后</span><h4>上一篇 / 下一篇</h4><p>线性翻页可用。</p><div class="leak">没有成就反馈、没有"相关概念"、没有明天回来的理由</div></div>
+    </div>
+
+    <div class="audit-grid">
+      <div class="acard keep"><h4><span class="tag">保留</span>该守住的灵魂</h4>
+        <ul>
+          <li><b>故事先行</b>的悬念机制——这是产品独一无二的记忆钩子。</li>
+          <li>寓言衬线 / 概念衬线的<b>双字体排版</b>，专业而克制。</li>
+          <li>暖色编辑气质、深浅主题、剧透警告——细节体贴。</li>
+          <li>已读状态、本地进度的<b>隐私优先</b>实现。</li>
+        </ul>
+      </div>
+      <div class="acard fix"><h4><span class="tag">改进</span>正在漏掉的动力</h4>
+        <ul>
+          <li><b>进度只是一根细条</b>——填满它没有任何情绪回报。</li>
+          <li><b>揭晓 = 被动</b>，错失了"先猜后揭"带来的主动回忆。</li>
+          <li>概念长文<b>缺少分层</b>，初学者被一次性灌入。</li>
+          <li>读完一篇<b>没有去向</b>：无推荐、无里程碑、无明日钩子。</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="refrow">
+      <div class="ref"><img src="_ref/answer-header-dark.png" alt="current concept page" /><div class="cap"><b>现状 · 揭晓页</b>　排版漂亮，但概念名直接砸下、长文无分层、读完即止。</div></div>
+      <div class="ref"><img src="_ref/answer-light.png" alt="current explanation" /><div class="cap"><b>现状 · 概念长文</b>　对练习者刚好，对初学者偏"墙"。这正是我们要分层的地方。</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ 2 · BETS ════════ -->
+<section class="block" id="bets">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-no">02</span><h2><span class="zh">四个设计主张</span> · The bets</h2></div>
+    <p class="sec-sub">所有具体改动都从这四条原则推导而来。它们是"为什么"，后面的选项是"怎么做"。</p>
+    <div class="bets">
+      <div class="bet"><span class="bn">01</span><h4>进度要能"被看见、被填满"</h4><p class="en">Make the territory visible.</p><p>把抽象的 0/100 变成一张能被点亮的版图。每读一篇都改变画面——这是最便宜也最强的回访理由。</p></div>
+      <div class="bet"><span class="bn">02</span><h4>先猜，后揭——把消费变成回忆</h4><p class="en">Retrieve before you reveal.</p><p>在揭晓前让读者押一个猜测。主动回忆是记忆留存的头号杠杆，而且让"揭晓"那一下更爽。</p></div>
+      <div class="bet"><span class="bn">03</span><h4>给初学者一道楼梯，而不是一堵墙</h4><p class="en">A staircase, not a wall.</p><p>概念按"一句话 → 故事对照 → 机制 → 深入"分层展开。新手拿到要义，练习者继续往下挖。</p></div>
+      <div class="bet"><span class="bn">04</span><h4>每篇结束都有"下一步"</h4><p class="en">Never end on a dead end.</p><p>读完不是终点：里程碑反馈、相关概念、明日一篇——永远给一个继续的理由。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ 3 · MOMENTUM ════════ -->
+<section class="block" id="momentum">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-no">03</span><h2><span class="zh">动力系统</span> · Progress &amp; momentum</h2></div>
+    <p class="sec-sub">你的第一优先级。核心想法：把"100 篇"做成一张<b>会被点亮的知识版图</b>，并在首页给一个"继续 / 连续天数 / 今日一篇"的动力条。下面是同一目标的几个可选呈现，可混搭。</p>
+
+    <div class="theme">
+      <div class="theme-head"><span class="tn">3A</span><h3>知识版图 · 替代那根进度条</h3></div>
+      <p class="theme-why">现在进度是 <code>0 / 100</code> 一根细线，填满它毫无回报。<b>把整个领域画成一张图</b>，读过的格子点亮——读者一眼看见"我走了多远 / 还剩哪片没探索"，空格本身就是召唤。这同时服务留存（情绪回报）和记忆（空间定位）。</p>
+
+      <div class="opts">
+        <div class="opt">
+          <div class="opt-head"><span class="badge pick">推荐</span><h4>选项 A · 田野图鉴（按概念群分行）</h4><span class="role">结构清晰 · 移动端友好</span></div>
+          <div class="opt-body">
+            <div class="mock-frame mock">
+              <div class="mock-bar"><span class="d"></span><span class="d"></span><span class="d"></span><span class="u">寓言集 · 我的版图</span></div>
+              <div class="kmap">
+                <div class="kmap-h"><h5>我的知识版图</h5><span class="big"><b id="kmReadCount">37</b> / 100 篇</span></div>
+                <p class="sub">每个色块是一篇故事 · 点亮 = 已揭晓 · 虚线框 = 建议下一篇</p>
+                <div id="kmapRows"></div>
+              </div>
+            </div>
+            <p class="opt-note" style="padding-top:1rem"><b>为何推荐：</b>保留了 12 概念群的结构（教学逻辑清楚），又给出强烈的"填满"动机；按行排版在手机上自然堆叠，桌面端一屏看尽全局。</p>
+          </div>
+        </div>
+
+        <div class="opt">
+          <div class="opt-head"><span class="badge">备选</span><h4>选项 B · 星图（100 格密铺）</h4><span class="role">视觉冲击强 · 适合首页 hero</span></div>
+          <div class="opt-body">
+            <div class="mock-frame mock">
+              <div class="mock-bar"><span class="d"></span><span class="d"></span><span class="d"></span><span class="u">寓言集 · 100 概念星图</span></div>
+              <div class="constel" id="constel"></div>
+              <div class="legend">
+                <span><i style="background:var(--terra)"></i>已读</span>
+                <span><i style="background:var(--surface-2)"></i>未读</span>
+                <span><i style="background:var(--gold)"></i>今日一篇</span>
+                <span class="muted">色温由暖到冷 = 从基础到前沿</span>
+              </div>
+            </div>
+            <p class="opt-note" style="padding-top:1rem"><b>取舍：</b>极强的"整片版图"观感，适合做首页主视觉；但牺牲了概念群标签的可读性，更适合作为<b>A 的氛围版 hero</b>，点进去再看 A 的分行细节。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="theme">
+      <div class="theme-head"><span class="tn">3B</span><h3>首页动力条 · 继续 / 连续 / 今日</h3></div>
+      <p class="theme-why">回访的三个经典钩子：<b>一键继续</b>（消除"从哪开始"的摩擦）、<b>连续天数</b>（习惯养成）、<b>今日一篇</b>（每天一个明确、有限的目标）。给初学者"今天只要读一篇"的轻量承诺，比"还剩 99 篇"友好得多。</p>
+      <div class="mock-frame mock">
+        <div class="mock-bar"><span class="d"></span><span class="d"></span><span class="d"></span><span class="u">寓言集 · 首页</span></div>
+        <div class="mstrip">
+          <div class="mtile resume">
+            <p class="lab">继续上次</p>
+            <h5>#38 · 推理时计算与思考模型</h5>
+            <span class="go">接着读 →</span>
+          </div>
+          <div class="mtile">
+            <p class="lab">连续天数</p>
+            <div class="big">5 天</div>
+            <div class="streak-dots"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="today"></i><i></i><i></i></div>
+          </div>
+          <div class="mtile">
+            <p class="lab">今日一篇</p>
+            <div class="big" style="font-size:1.15rem;font-family:var(--cjk);font-weight:700;line-height:1.3">奖励黑客<br><span style="font-family:var(--sans);font-size:.74rem;color:var(--muted);font-weight:400">安全与对齐 · P0</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="callout"><b>留存机制叠加：</b>版图（看见全局）+ 连续天数（习惯）+ 今日一篇（每日有限目标）+ 里程碑（10/25/50/100 的微庆祝）——四个独立钩子互相强化，且全部用现有的本地存储即可实现，无需登录。</div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ 4 · LEARNING LOOP ════════ -->
+<section class="block" id="loop">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-no">04</span><h2><span class="zh">学习闭环</span> · Rethinking the reveal</h2></div>
+    <p class="sec-sub">你说可以重构教学流程——这是最大的留存与记忆机会。现在是"读 → 点揭晓 → 长文"。提议升级为四拍：<b>读 → 猜 → 揭 → 桥接 + 分层</b>。左暖（故事）右冷（概念）的色温翻转，让"揭晓"成为一个有仪式感的瞬间。</p>
+
+    <div class="opt">
+      <div class="opt-head"><span class="badge pick">核心提案</span><h4>先猜后揭 + 故事↔概念桥接 + 分层展开</h4><span class="role">主动回忆 · 降低初学者门槛</span></div>
+      <div class="opt-body" style="padding:0">
+        <div class="mock-frame mock" style="border:none;box-shadow:none;border-radius:0">
+          <div class="loop">
+            <div class="loop-side story">
+              <p class="loop-tag">▍寓言 · 先读故事</p>
+              <p class="parable-demo">老木匠从不亲手雕花。他只把学徒做坏的活儿一件件挑出来，说"这里浅了""那里歪了"，从不示范一刀该怎么下……日子久了，学徒的手竟比谁都稳。</p>
+              <div class="guess">
+                <p class="q">揭晓前，先押一个猜测 · 你觉得这讲的是？</p>
+                <div class="guess-chips">
+                  <span class="gchip">监督微调 SFT</span>
+                  <span class="gchip sel">人类反馈强化学习 RLHF</span>
+                  <span class="gchip">直接偏好优化 DPO</span>
+                  <span class="gchip muted">我不确定，直接揭晓</span>
+                </div>
+              </div>
+            </div>
+            <div class="loop-side concept">
+              <p class="loop-tag">◆ 谜底 · The Concept</p>
+              <div class="concept-name">RLHF<span class="zh">人类反馈强化学习 · 后训练与对齐</span></div>
+              <div class="bridge"><b>故事↔概念　</b>木匠＝奖励模型：他不示范"正确答案"，只对学徒的产出打分（更好/更差）。模型正是这样从<b>偏好比较</b>中学会对齐，而非从标准答案里学。</div>
+              <div class="layers">
+                <div class="layer"><div class="lh">一句话<span class="pill">TL;DR</span></div><p>用"人更喜欢哪个回答"的偏好信号去微调模型，而不是给它标准答案。</p></div>
+                <div class="layer collapsed"><div class="lh">关键机制<span class="pill">展开</span></div></div>
+                <div class="layer collapsed"><div class="lh">为何重要<span class="pill">展开</span></div></div>
+                <div class="layer collapsed"><div class="lh">争议与前沿<span class="pill">展开</span></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="opt-note"><b>三处改动，各自命中一个目标：</b>① <b>先猜</b>触发主动回忆（记忆留存）；② <b>桥接句</b>把寓言和概念显式连起来——这本是产品的核心承诺，现在却留给读者自己脑补；③ <b>分层展开</b>把那堵"长文墙"变成楼梯，初学者读一句话即有收获，练习者逐层深入。现有长文内容<b>无需重写</b>，只要按已有的"关键机制 / 为何重要 / 争议"小标题折叠即可。</p>
+    </div>
+
+    <div class="theme">
+      <div class="theme-head"><span class="tn">4B</span><h3>读完之后 · 不要停在死胡同</h3></div>
+      <p class="theme-why">现在揭晓后只有"上一篇 / 下一篇"。增加三件事让动力延续：<b>里程碑反馈</b>（"你点亮了对齐群的一半！"）、<b>相关概念</b>（RLHF → DPO → GRPO 的横向跳转，而非只能线性翻页）、以及一个<b>30 秒自测</b>把刚读的概念再激活一次（间隔重复的种子）。</p>
+      <div class="mock-frame mock">
+        <div class="mock-bar"><span class="d"></span><span class="d"></span><span class="d"></span><span class="u">读完 #38 之后</span></div>
+        <div style="padding:1.3rem 1.4rem">
+          <div style="display:flex;align-items:center;gap:.7rem;background:var(--terra-tint);border:1px solid color-mix(in srgb,var(--terra) 28%,var(--line));border-radius:.5rem;padding:.7rem .9rem;margin-bottom:1.1rem">
+            <span style="font-size:1.3rem">◆</span>
+            <span style="font-family:var(--cjk);font-weight:600;font-size:.92rem;color:var(--terra-deep)">里程碑 · 你已点亮"后训练与对齐"群 5 / 10 篇——过半了！</span>
+          </div>
+          <p style="font-family:var(--sans);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0 0 .6rem">顺着这条线索 · Related concepts</p>
+          <div class="path">
+            <span class="step done"><span class="pri" style="background:var(--p1)"></span>RLHF</span>
+            <span class="arrow">→</span>
+            <span class="step"><span class="pri" style="background:var(--p1)"></span>DPO 直接偏好优化</span>
+            <span class="arrow">→</span>
+            <span class="step"><span class="pri" style="background:var(--p1)"></span>GRPO</span>
+            <span class="arrow">→</span>
+            <span class="step"><span class="pri" style="background:var(--p0)"></span>奖励黑客</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ 5 · HOME & ONBOARDING ════════ -->
+<section class="block" id="home">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-no">05</span><h2><span class="zh">首页与入门</span> · Home, paths &amp; onboarding</h2></div>
+    <p class="sec-sub">初学者第一眼要回答两个问题：<b>这是什么？</b> 和 <b>我该从哪开始？</b> 现状两者都缺。提议把首页从"12 个术语网格"升级为"一条推荐路径 + 一张版图 + 一个继续按钮"。</p>
+
+    <div class="theme">
+      <div class="theme-head"><span class="tn">5A</span><h3>推荐学习路径 · 给初学者一条线</h3></div>
+      <p class="theme-why">12 个陌生术语群会让新手瘫痪。用 P0/P1 优先级（数据里已经有了！）<b>编排一条"新手必读"路径</b>，把选择的负担从读者身上拿走。高级用户依旧可以自由浏览版图。</p>
+      <div class="mock-frame mock">
+        <div class="mock-bar"><span class="d"></span><span class="d"></span><span class="d"></span><span class="u">寓言集 · 首页 hero</span></div>
+        <div class="homehero">
+          <div class="hh-title"><span class="zh">寓言集</span> · LLM Parables</div>
+          <p class="hh-sub">先读故事，再揭晓概念 · 百篇中文寓言，照亮大语言模型的核心思想</p>
+          <p style="font-family:var(--sans);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:.4rem 0 .2rem">新手路径 · 从这 4 篇开始</p>
+          <div class="path">
+            <span class="step done"><span class="pri" style="background:var(--p0)"></span>Agent 是什么</span>
+            <span class="arrow">→</span>
+            <span class="step"><span class="pri" style="background:var(--p0)"></span>推理时计算</span>
+            <span class="arrow">→</span>
+            <span class="step"><span class="pri" style="background:var(--p1)"></span>RLHF</span>
+            <span class="arrow">→</span>
+            <span class="step"><span class="pri" style="background:var(--p0)"></span>对齐安全</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="theme">
+      <div class="theme-head"><span class="tn">5B</span><h3>30 秒入门 · 它怎么玩</h3></div>
+      <p class="theme-why">"故事先行"很妙，但若不解释，新访客会困惑。首次访问时给一个一次性的三步说明（之后不再出现），把规则讲清楚——读、猜、揭。</p>
+      <div class="mock-frame mock">
+        <div class="mock-bar"><span class="d"></span><span class="d"></span><span class="d"></span><span class="u">第一次来？</span></div>
+        <div class="steps3">
+          <div class="s3"><div class="num">1</div><h6>读一则寓言</h6><p>一个看似与 AI 无关的小故事。先别急着对号入座。</p></div>
+          <div class="s3"><div class="num">2</div><h6>猜它讲什么</h6><p>押一个概念。猜错也没关系——这一步让你记得更牢。</p></div>
+          <div class="s3"><div class="num">3</div><h6>揭晓谜底</h6><p>看到概念本体，以及故事到底对应它的哪一部分。</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="theme">
+      <div class="theme-head"><span class="tn">5C</span><h3>视觉演进 · 同样的灵魂，更大胆</h3></div>
+      <p class="theme-why">保留暖色编辑气质，但<b>引入"故事暖 / 概念冷"的色温二元</b>——这不只是好看，而是把产品的核心叙事（从感性故事走向理性概念）编码进了配色。再把那枚偏灰的 <code>#8b4513</code> 提纯为更有生命力的赤陶色。</p>
+      <div class="mock-frame mock">
+        <div class="typ">
+          <div class="typ-col">
+            <p class="lab">现状</p>
+            <div style="font-family:var(--cjk);font-weight:700;font-size:1.3rem">监督微调</div>
+            <div style="font-family:Georgia,serif;color:#8b4513;font-size:1.1rem">SFT (Supervised Fine-Tuning)</div>
+            <div class="swatches">
+              <div class="sw" style="background:#faf8f3;color:#7a6f60">#faf8f3</div>
+              <div class="sw" style="background:#8b4513">#8b4513</div>
+              <div class="sw" style="background:#2a2318">#2a2318</div>
+            </div>
+          </div>
+          <div class="typ-col">
+            <p class="lab">提议 · 暖纸 + 冷墨双色温</p>
+            <div style="font-family:var(--cjk);font-weight:700;font-size:1.3rem">监督微调</div>
+            <div style="font-family:var(--serif);font-style:italic;color:var(--terra);font-size:1.15rem;font-weight:500">SFT · Supervised Fine-Tuning</div>
+            <div class="swatches">
+              <div class="sw" style="background:#f4efe6;color:#857a66">暖纸 故事</div>
+              <div class="sw" style="background:#b4522e">赤陶 强调</div>
+              <div class="sw" style="background:#16212e">冷墨 概念</div>
+              <div class="sw" style="background:#c08a3e">金 里程碑</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ 6 · ROADMAP ════════ -->
+<section class="block" id="road">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-no">06</span><h2><span class="zh">路线图</span> · A phased plan</h2></div>
+    <p class="sec-sub">按"投入产出比"排序：先做几乎零成本、立刻提升黏性的快赢，再做需要内容/交互工程的大改。全部基于现有的 Astro + 本地存储，无需后端或登录。</p>
+    <div class="road">
+      <div class="phase p1">
+        <div class="ph-no">1</div>
+        <div>
+          <h4>快赢 · 不动内容，先点燃动力</h4>
+          <span class="when">约 1 周 · 纯前端</span>
+          <ul>
+            <li>知识版图（3A 选项 A）替换进度条</li>
+            <li>首页"继续上次"按钮</li>
+            <li>连续天数 + 今日一篇</li>
+            <li>里程碑反馈（10/25/50/100）</li>
+            <li>赤陶色提纯 + 色温二元配色</li>
+            <li>首次访问三步说明</li>
+          </ul>
+        </div>
+      </div>
+      <div class="phase p2">
+        <div class="ph-no">2</div>
+        <div>
+          <h4>学习闭环 · 重构揭晓体验</h4>
+          <span class="when">约 2–3 周 · 交互 + 轻内容标注</span>
+          <ul>
+            <li>"先猜后揭"猜测交互</li>
+            <li>概念长文分层折叠（复用已有小标题）</li>
+            <li>每篇补一句"故事↔概念"桥接</li>
+            <li>揭晓页色温翻转动画</li>
+            <li>读完后的"相关概念"横向跳转</li>
+            <li>新手推荐路径（用现有 P0/P1）</li>
+          </ul>
+        </div>
+      </div>
+      <div class="phase p3">
+        <div class="ph-no">3</div>
+        <div>
+          <h4>记忆与回访 · 长线留存</h4>
+          <span class="when">探索性 · 更大投入</span>
+          <ul>
+            <li>30 秒概念自测（主动回忆）</li>
+            <li>间隔重复："今天复习这 3 个概念"</li>
+            <li>版图分享卡片（社交回环）</li>
+            <li>星图 hero（3A 选项 B）作氛围首屏</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout" style="margin-top:2rem"><b>已为你做出原型：</b>本方案推荐的两块——<b>知识版图 + 先猜后揭</b>——已经做成可点击的高保真原型（它们一次同时命中你的两个目标：黏性 + 留存）。<a href="Prototype.html" style="font-weight:700;text-decoration:underline">▸ 打开原型体验 →</a>　读完一篇，看版图被点亮。</div>
+  </div>
+</section>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="em">"先读故事，再揭晓概念。"</span>
+    寓言集 · LLM Parables — UI &amp; 流程优化方案　·　探索性方案，所有数字与示例为演示用途
+  </div>
+</footer>
+
+<script>
+// ── Cluster data (mirrors site/src/data/clusters.ts) ──
+const CLUSTERS = [
+  {zh:'架构与表征', n:8, pri:'p2'},
+  {zh:'训练动力学与扩展', n:7, pri:'p2'},
+  {zh:'上下文学习', n:8, pri:'p3'},
+  {zh:'后训练与对齐', n:10, pri:'p1'},
+  {zh:'推理时计算', n:7, pri:'p0'},
+  {zh:'机制可解释性', n:10, pri:'p1'},
+  {zh:'长上下文与记忆', n:7, pri:'p3'},
+  {zh:'检索与外部知识', n:7, pri:'p3'},
+  {zh:'Agent 系统', n:8, pri:'p0'},
+  {zh:'安全与对齐', n:10, pri:'p0'},
+  {zh:'效率与系统', n:9, pri:'p2'},
+  {zh:'评估与基准', n:9, pri:'p3'},
+];
+const PRI_COLOR = {p0:'var(--p0)',p1:'var(--p1)',p2:'var(--p2)',p3:'var(--p3)'};
+
+// pretend-read pattern: front-load to look like an active learner (~37 read)
+const READ_PER = [8,7,5,5,4,2,2,1,2,0,1,0]; // sums to 37
+
+// ── 3A · field-guide rows ──
+const rows = document.getElementById('kmapRows');
+let totalRead = 0;
+CLUSTERS.forEach((c, ci) => {
+  const read = READ_PER[ci];
+  totalRead += read;
+  const row = document.createElement('div');
+  row.className = 'km-cluster';
+  const name = document.createElement('div');
+  name.className = 'km-name';
+  name.innerHTML = `<span class="pri" style="background:${PRI_COLOR[c.pri]}"></span>${c.zh}`;
+  const pips = document.createElement('div');
+  pips.className = 'km-pips';
+  for (let i = 0; i < c.n; i++) {
+    const p = document.createElement('span');
+    p.className = 'pip' + (i < read ? ' on' : '') + (i === read && read < c.n && read > 0 ? ' next' : '');
+    pips.appendChild(p);
+  }
+  const ct = document.createElement('div');
+  ct.className = 'km-ct';
+  ct.innerHTML = `<b>${read}</b>/${c.n}`;
+  row.append(name, pips, ct);
+  rows.appendChild(row);
+});
+
+// ── 3B · constellation 100 nodes ──
+const constel = document.getElementById('constel');
+if (constel) {
+  // build a flat list of 100 with cluster index for color temp
+  const nodes = [];
+  CLUSTERS.forEach((c, ci) => { for (let i=0;i<c.n;i++) nodes.push({ci, read: i < READ_PER[ci]}); });
+  // color temperature warm->cool across the 12 clusters
+  nodes.forEach((nd, idx) => {
+    const el = document.createElement('div');
+    el.className = 'cnode';
+    if (nd.read) {
+      el.style.background = 'var(--terra)';
+    } else {
+      // unread: faint hue shift warm(0)->cool(11)
+      const t = nd.ci / 11;
+      const hue = 28 + t * 175; // 28 (warm) -> ~203 (cool)
+      el.style.background = `oklch(0.82 0.03 ${hue})`;
+    }
+    constel.appendChild(el);
+  });
+  // mark one as "today"
+  const idxs = [...constel.children];
+  if (idxs[41]) { idxs[41].style.background = 'var(--gold)'; idxs[41].style.boxShadow='0 0 0 2px color-mix(in srgb,var(--gold) 35%,transparent)'; }
+}
+
+// ── layered explanation demo: click to expand ──
+document.querySelectorAll('.layer.collapsed').forEach(l => {
+  l.style.cursor = 'pointer';
+  l.addEventListener('click', () => l.classList.toggle('collapsed'));
+});
+</script>
+</body>
+</html>

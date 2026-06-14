@@ -1,0 +1,16 @@
+---
+export interface Props {
+  clusterSlug: string;
+  n: number;
+  storyId: string;
+  concept: string;
+}
+
+const { clusterSlug, n, storyId, concept } = Astro.props;
+---
+<a href={`/stories/${clusterSlug}/${n}/`} class="story-card" data-story-id={storyId}>
+  <span class="story-num">故事 #{n}</span>
+  <span class="story-placeholder">· · ·</span>
+  <span class="story-title" hidden>{concept}</span>
+  <span class="read-mark" hidden>✓</span>
+</a>

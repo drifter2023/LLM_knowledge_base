@@ -1,0 +1,226 @@
+---
+import { getCollection } from 'astro:content';
+import { clusters } from '../../../data/clusters';
+import { splitStory } from '../../../lib/split';
+import { renderMd } from '../../../lib/markdown';
+import { parseLayers, layersFromDigest, renderDeepRead, deepReadSource, type DigestSection } from '../../../lib/sections';
+import { buildGuesses, buildBridge, buildRelated, type SiblingConcept } from '../../../lib/story-extras';
+import digests from '../../../data/digests.json';
+import conceptZh from '../../../data/concept-zh.json';
+import refTitles from '../../../data/ref-titles.json';
+import Base from '../../../layouts/Base.astro';
+import 'katex/dist/katex.min.css';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('stories');
+  const entryById = new Map(entries.map((e) => [e.id, e]));
+
+  const paths: any[] = [];
+
+  for (const c of clusters) {
+    const total = c.storyOrder.length;
+    // Sibling concepts within this cluster — feed distractors + related links.
+    const siblings: SiblingConcept[] = c.storyOrder.map((id, i) => {
+      const e = entryById.get(`${c.slug}/${id}`);
+      return { id, concept: e?.data.concept ?? id, n: i + 1 };
+    });
+
+    for (let i = 0; i < total; i++) {
+      const id = c.storyOrder[i];
+      const entry = entryById.get(`${c.slug}/${id}`);
+      if (!entry) throw new Error(`Missing story entry for id "${c.slug}/${id}" in cluster "${c.slug}"`);
+
+      const guesses = buildGuesses(id, entry.data.concept, i, siblings, entry.data.distractors);
+      const bridge = buildBridge(entry.data.concept, entry.data.bridge);
+      const related = buildRelated(c.slug, id, siblings, entry.data.related);
+
+      paths.push({
+        params: { cluster: c.slug, n: String(i + 1) },
+        props: {
+          entry,
+          cluster: c,
+          conceptId: id,
+          n: i + 1,
+          total,
+          prevN: i > 0 ? i : null,
+          nextN: i < total - 1 ? i + 2 : null,
+          guesses,
+          bridge,
+          related,
+        },
+      });
+    }
+  }
+
+  return paths;
+}
+
+const { entry, cluster, conceptId, n, total, prevN, nextN, guesses, bridge, related } = Astro.props;
+
+// Lookups for the authored Chinese guess labels + real reference titles.
+const conceptZhMap = conceptZh as Record<string, string>;
+const refTitleMap = refTitles as Record<string, string>;
+
+// 追问 (premium Ask) is disabled for now — flip to true to re-enable the module
+// (also needs the Worker's ANTHROPIC_API_KEY secret to serve live answers).
+const ASK_ENABLED = false;
+
+const { parable, explanation } = splitStory(entry.body ?? '');
+const parableHtml = renderMd(parable);
+// Prefer the authored Chinese digest (src/data/digests.json) for 中文速览;
+// fall back to splitting the English explanation when a story isn't translated.
+const digest = (digests as Record<string, DigestSection[]>)[conceptId];
+const layers = digest && digest.length ? layersFromDigest(digest) : parseLayers(explanation);
+const deepReadHtml = renderDeepRead(explanation);
+
+// Grounding context for the 追问 (Ask) module — sent to the model so replies are
+// anchored to THIS concept, not generic chat.
+const askContext = {
+  concept: entry.data.concept,
+  cluster: cluster.zh,
+  bridge,
+  explanation: deepReadSource(explanation),
+  fable: parable,
+};
+---
+
+<Base title={`故事 #${n} · ${cluster.zh}`}>
+  <article class="story-wrap" data-story-id={conceptId}>
+    <nav class="story-breadcrumb">
+      <a href="/">← 知识版图</a>
+      <span class="sep">·</span>
+      <a href={`/clusters/${cluster.slug}/`}>{cluster.zh}</a>
+      <span class="sep">·</span>
+      <span>故事 #{n} / {total}</span>
+    </nav>
+
+    <div data-pagefind-body data-pagefind-meta={`title:${entry.data.concept}`}>
+      <div class="parable story-article" set:html={parableHtml} />
+
+      {/* ── 先猜 (guess) ── */}
+      <div class="guess" id="guess-block">
+        <p class="q"><span class="badge">先猜</span>揭晓前，先押一个猜测 · 你觉得这讲的是？</p>
+        <div class="gchips">
+          {guesses.map((g, i) => (
+            <button class="gchip" data-i={i} data-correct={String(g.correct)}>
+              <span class="key">{String.fromCharCode(65 + i)}</span>
+              <span class="glabel">{conceptZhMap[g.id] ?? g.label}</span>
+            </button>
+          ))}
+          <button class="gchip skip" id="skip-guess">我不确定，直接揭晓</button>
+        </div>
+        <div class="reveal-row">
+          <button class="reveal-btn" id="reveal-btn">揭晓谜底</button>
+          <span class="reveal-hint" id="reveal-hint">选一个猜测，会更难忘 · 也可直接揭晓</span>
+        </div>
+      </div>
+
+      {/* ── 揭晓 (the cool-ink concept panel) ── */}
+      <section class="concept" id="concept-panel" hidden>
+        <div class="gfeedback" id="gfeedback" hidden></div>
+        <p class="c-eyebrow">谜底 · The Concept</p>
+        <h2 class="c-name">{entry.data.concept}</h2>
+        <p class="c-zh">{cluster.en} · {cluster.zh}</p>
+
+        <div class="bridge"><b>故事 ↔ 概念　</b>{bridge}</div>
+
+        <p class="layers-h">中文速览 · Quick read</p>
+        <div class="layers">
+          {layers.map((l, i) => (
+            <div class={`layer${i === 0 ? ' open' : ''}`}>
+              <button class="layer-h" type="button">
+                <span class="pill">{l.pill}</span>{l.title}<span class="chev">›</span>
+              </button>
+              <div class="layer-b" set:html={l.html} />
+            </div>
+          ))}
+        </div>
+
+        <div class="deepread-head"><span>英文精读 · Deep Read</span><span class="line"></span></div>
+        <div class="essay-en" set:html={deepReadHtml} />
+
+        {entry.data.sources.length > 0 && (
+          <div class="c-sources">
+            <h3>来源 · References</h3>
+            <ul>
+              {entry.data.sources.map((url, i) => (
+                <li>
+                  <span class="src-num">[{i + 1}]</span>
+                  <a href={url} target="_blank" rel="noopener">
+                    <span class="src-title">{refTitleMap[url] ?? url}</span>
+                    <span class="src-url">{url}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {/* ── 追问 (premium Ask) — disabled via ASK_ENABLED ── */}
+        {ASK_ENABLED && (
+          <div class="ask locked" id="ask-module">
+            <div class="ask-top"><span class="ttl">追问</span><span class="pro-badge">◆ PRO</span></div>
+            <p class="ask-sub">就这个概念向 AI 追问，问到懂为止。</p>
+            <div class="qa" id="qa-live">
+              <div class="bub u">能用一句最简单的话再讲一次吗？</div>
+              <div class="bub a"><b>（示例）</b>{layers[0]?.title}讲的就是它最核心的那一步——把寓言里的画面对回到机制上，你就记住了。</div>
+            </div>
+            <div class="ask-input">
+              <input id="ask-field" placeholder={`问一个关于「${entry.data.concept}」的问题…`} autocomplete="off" />
+              <button class="send" id="ask-send">问</button>
+            </div>
+            <p class="ask-quota" id="ask-quota"></p>
+            <div class="chips" id="ask-chips">
+              <button class="chip">用更简单的话再讲一次</button>
+              <button class="chip">举个例子</button>
+              <button class="chip">和相关概念有什么区别？</button>
+            </div>
+            <div class="lock-over">
+              <button class="cta" id="unlock-btn">🔒 解锁追问</button>
+            </div>
+          </div>
+        )}
+
+        {related.length > 0 && (
+          <div class="related">
+            <p class="rh">顺着这条线索 · 相关概念</p>
+            <div class="rchips">
+              {related.map((r) => (
+                <a
+                  class="rchip locked"
+                  href={`/stories/${r.clusterSlug}/${r.n}/`}
+                  data-story-id={r.id}
+                  data-concept={r.concept}
+                >
+                  <span class="rc-name">故事 #{r.n}</span>
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
+      </section>
+    </div>{/* end data-pagefind-body */}
+
+    <div class="story-foot" id="story-foot">
+      {prevN !== null ? (
+        <a href={`/stories/${cluster.slug}/${prevN}/`} class="foot-btn">← 上一篇</a>
+      ) : (
+        <a href="/" class="foot-btn">← 知识版图</a>
+      )}
+      {nextN !== null ? (
+        <a href={`/stories/${cluster.slug}/${nextN}/`} class="foot-btn primary">下一篇 →</a>
+      ) : (
+        <a href="/" class="foot-btn primary">回到版图 →</a>
+      )}
+    </div>
+  </article>
+
+  <div id="toast"></div>
+  {ASK_ENABLED && (
+    <script type="application/json" id="ask-context" set:html={JSON.stringify(askContext).replace(/</g, '\\u003c')}></script>
+  )}
+</Base>
+
+<script>
+  import '../../../scripts/story';
+</script>

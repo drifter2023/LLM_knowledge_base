@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>概念页 · 英文精读 + 追问 · 设计选项</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --paper:#f4efe6; --paper-2:#efe8db; --surface:#e9e0cf; --surface-2:#e2d6c0;
+  --ink:#211c13; --ink-soft:#473e30; --muted:#857a66; --faint:#b8ad97;
+  --line:#dccfb8; --line-strong:#cbbb9e;
+  --terra:#b4522e; --terra-deep:#8f3d1f; --terra-tint:#f0d9cb;
+  --ink-blue:#16212e; --ink-blue-2:#1f2d3d; --cool:#3f6f8f; --cool-soft:#8fb0c4; --gold:#c08a3e;
+  --serif:"Newsreader",Georgia,serif; --cjk:"Noto Serif SC",serif;
+  --sans:"Noto Sans SC",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --maxw:58rem;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--cjk);font-size:17px;line-height:1.7;-webkit-font-smoothing:antialiased;
+  background-image:radial-gradient(circle at 12% -8%,#fbf7ef 0%,transparent 42%),radial-gradient(circle at 100% 0,#f6f0e4 0%,transparent 40%);background-attachment:fixed}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 1.5rem}
+h1,h2,h3,h4,h5{font-family:var(--serif);font-weight:500;letter-spacing:-.01em;line-height:1.15}
+p{margin:0 0 1em}
+.muted{color:var(--muted)}
+
+/* header */
+.hd{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--paper) 88%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.hd .wrap{display:flex;align-items:center;justify-content:space-between;height:56px;gap:1rem}
+.brand{font-family:var(--cjk);font-weight:700;font-size:1rem}
+.brand b{color:var(--terra)}
+.hd .tag{font-family:var(--sans);font-size:.78rem;color:var(--muted)}
+
+/* intro */
+.intro{padding:3.4rem 0 1rem}
+.eyebrow{font-family:var(--sans);font-size:.72rem;letter-spacing:.17em;text-transform:uppercase;color:var(--terra);margin:0 0 .7rem}
+.intro h1{font-size:clamp(2rem,4.5vw,3rem);margin:0 0 .5rem}
+.intro h1 .en{font-style:italic;font-weight:400;color:var(--muted);font-size:.5em}
+.intro p.lede{font-family:var(--cjk);font-size:1.08rem;color:var(--ink-soft);max-width:42rem}
+.goals{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.6rem 0 0}
+@media(max-width:680px){.goals{grid-template-columns:1fr}}
+.goal{background:var(--paper-2);border:1px solid var(--line);border-radius:.6rem;padding:1.1rem 1.25rem}
+.goal .n{font-family:var(--sans);font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--terra);font-weight:600}
+.goal h4{font-family:var(--cjk);font-weight:700;font-size:1.05rem;margin:.3rem 0 .3rem}
+.goal p{font-family:var(--sans);font-size:.85rem;color:var(--ink-soft);margin:0;line-height:1.55}
+
+/* section */
+section.block{padding:3.2rem 0;border-top:1px solid var(--line);margin-top:2.4rem}
+.sec-head{display:flex;align-items:baseline;gap:.9rem;margin-bottom:.4rem}
+.sec-no{font-family:var(--serif);font-weight:600;color:var(--terra);font-size:1rem}
+.sec-head h2{font-family:var(--cjk);font-weight:700;font-size:1.6rem;margin:0}
+.sec-sub{font-family:var(--sans);color:var(--muted);font-size:.92rem;max-width:44rem;margin:.2rem 0 2rem}
+
+/* option label */
+.opt-label{display:flex;align-items:center;gap:.7rem;margin:2.4rem 0 .5rem}
+.opt-label .badge{font-family:var(--sans);font-size:.72rem;font-weight:700;letter-spacing:.06em;color:#fff;background:var(--ink-soft);border-radius:.35rem;padding:.24rem .6rem}
+.opt-label .badge.pick{background:var(--terra)}
+.opt-label h3{font-family:var(--cjk);font-weight:700;font-size:1.2rem;margin:0}
+.opt-label .role{font-family:var(--sans);font-size:.78rem;color:var(--muted);margin-left:auto}
+.opt-why{font-family:var(--sans);font-size:.86rem;color:var(--ink-soft);border-left:2px solid var(--line-strong);padding-left:.9rem;margin:.5rem 0 1.1rem;max-width:46rem}
+.opt-why b{color:var(--terra-deep)}
+
+/* ── concept panel (cool, mirrors prototype) ── */
+.concept{background:linear-gradient(170deg,var(--ink-blue),#101a26);color:#e9e0cf;border-radius:.9rem;padding:1.7rem 1.7rem 1.6rem;box-shadow:0 24px 60px -30px rgba(16,26,38,.7)}
+.c-eyebrow{font-family:var(--sans);font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--cool-soft);margin:0 0 .4rem}
+.c-top{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.c-name{font-family:var(--serif);font-weight:600;font-size:1.85rem;color:#eaae84;margin:0 0 .12rem;line-height:1.1}
+.c-zh{font-family:var(--cjk);font-size:.92rem;color:var(--cool-soft);margin:0 0 1rem}
+.bridge{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-left:3px solid var(--gold);border-radius:.45rem;padding:.8rem 1rem;font-family:var(--sans);font-size:.86rem;line-height:1.6;margin:0 0 1.2rem;color:#ddd3bf}
+.bridge b{color:var(--gold);font-weight:600}
+
+/* layers */
+.layers{border-top:1px solid rgba(255,255,255,.12)}
+.layer{border-bottom:1px solid rgba(255,255,255,.1)}
+.layer-h{display:flex;align-items:center;gap:.6rem;width:100%;background:none;border:none;color:#e9e0cf;padding:.8rem 0;font-family:var(--cjk);font-weight:600;font-size:.98rem;text-align:left;cursor:pointer}
+.layer-h .pill{font-family:var(--sans);font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:var(--cool-soft);border:1px solid rgba(143,176,196,.4);border-radius:1rem;padding:.12rem .5rem;font-weight:600;flex-shrink:0}
+.layer-h .chev{margin-left:auto;color:var(--cool-soft);font-size:.8rem;transition:transform .2s}
+.layer.open .layer-h .chev{transform:rotate(90deg)}
+.layer-b{font-family:var(--sans);font-size:.88rem;line-height:1.7;color:#c4bba6;display:none;padding:0 0 .9rem}
+.layer.open .layer-b{display:block}
+.layer-b.en{font-family:var(--serif);font-size:1rem;color:#d6ccb6;line-height:1.7}
+
+/* language toggle */
+.langseg{display:inline-flex;border:1px solid rgba(255,255,255,.22);border-radius:.45rem;overflow:hidden;font-family:var(--sans);font-size:.74rem}
+.langseg button{background:transparent;border:none;color:var(--cool-soft);padding:.3rem .7rem;cursor:pointer}
+.langseg button.act{background:var(--gold);color:#1a1205;font-weight:600}
+
+/* tabs */
+.ctabs{display:flex;gap:.4rem;border-bottom:1px solid rgba(255,255,255,.14);margin:.2rem 0 1rem}
+.ctab{background:none;border:none;color:var(--cool-soft);font-family:var(--cjk);font-weight:600;font-size:.92rem;padding:.5rem .2rem;margin-right:1rem;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px}
+.ctab.act{color:#eaae84;border-bottom-color:#eaae84}
+
+/* english deep-read essay */
+.essay{display:none}
+.essay.show{display:block}
+.deepread-head{display:flex;align-items:center;gap:.7rem;margin:1.6rem 0 1rem;color:var(--cool-soft)}
+.deepread-head .line{flex:1;height:1px;background:rgba(255,255,255,.14)}
+.deepread-head span{font-family:var(--sans);font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;white-space:nowrap}
+.essay-en{font-family:var(--serif);font-size:1.04rem;line-height:1.78;color:#d8cfba;max-width:42em}
+.essay-en p{margin:0 0 1em}
+.essay-en .label{display:block;font-family:var(--sans);font-size:.7rem;font-weight:650;letter-spacing:.1em;text-transform:uppercase;color:#eaae84;margin:1.6em 0 .4em}
+.essay-en .label:first-child{margin-top:0}
+.essay-en em{color:#cbbfa7}
+.essay-en .formula{display:inline-block;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.86em;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:.3rem;padding:.05em .4em;color:#e6dcc6}
+
+/* ── premium Ask / 追问 module ── */
+.ask{margin-top:1.5rem;border:1px solid rgba(192,138,62,.4);background:linear-gradient(180deg,rgba(192,138,62,.1),rgba(192,138,62,.02));border-radius:.7rem;padding:1.1rem 1.2rem;position:relative;overflow:hidden}
+.ask-top{display:flex;align-items:center;gap:.55rem;margin-bottom:.8rem}
+.ask-top .ttl{font-family:var(--cjk);font-weight:700;font-size:1rem;color:#f0e6d2}
+.pro-badge{font-family:var(--sans);font-size:.6rem;font-weight:700;letter-spacing:.1em;color:#1a1205;background:linear-gradient(90deg,#e7b86a,var(--gold));border-radius:1rem;padding:.16rem .55rem;display:inline-flex;align-items:center;gap:.25rem}
+.ask-sub{font-family:var(--sans);font-size:.78rem;color:var(--cool-soft);margin:0 0 .85rem}
+/* chat exchange */
+.qa{display:flex;flex-direction:column;gap:.6rem;margin-bottom:.9rem}
+.bub{font-family:var(--sans);font-size:.84rem;line-height:1.55;border-radius:.7rem;padding:.6rem .85rem;max-width:86%}
+.bub.u{align-self:flex-end;background:var(--cool);color:#eaf2f7;border-bottom-right-radius:.2rem}
+.bub.a{align-self:flex-start;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:#d4cab4;border-bottom-left-radius:.2rem}
+.bub.a b{color:#eaae84;font-weight:600}
+/* input */
+.ask-input{display:flex;gap:.5rem;align-items:center;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16);border-radius:.6rem;padding:.45rem .45rem .45rem .9rem}
+.ask-input input{flex:1;background:none;border:none;outline:none;color:#e9e0cf;font-family:var(--cjk);font-size:.88rem}
+.ask-input input::placeholder{color:var(--cool-soft)}
+.ask-input .send{background:var(--gold);color:#1a1205;border:none;border-radius:.45rem;padding:.45rem .9rem;font-family:var(--cjk);font-weight:600;font-size:.85rem;cursor:pointer}
+.chips{display:flex;gap:.45rem;flex-wrap:wrap;margin-top:.7rem}
+.chip{font-family:var(--sans);font-size:.76rem;color:var(--cool-soft);border:1px solid rgba(143,176,196,.35);border-radius:2rem;padding:.3rem .7rem;cursor:pointer}
+.chip:hover{border-color:#eaae84;color:#eaae84}
+/* locked state */
+.ask.locked .qa{filter:blur(3.5px);opacity:.6;pointer-events:none;user-select:none}
+.lock-over{position:absolute;inset:auto 0 0 0;top:42%;display:flex;flex-direction:column;align-items:center;text-align:center;gap:.6rem;padding:1.2rem;background:linear-gradient(180deg,transparent,rgba(16,26,38,.86) 38%)}
+.lock-over .lk{font-family:var(--cjk);font-weight:700;font-size:1rem;color:#f0e6d2}
+.lock-over .lk .ic{color:var(--gold)}
+.lock-over .d{font-family:var(--sans);font-size:.78rem;color:var(--cool-soft);max-width:24rem}
+.lock-over .cta{display:inline-flex;align-items:center;gap:.5rem;background:linear-gradient(90deg,#e7b86a,var(--gold));color:#1a1205;font-family:var(--cjk);font-weight:700;font-size:.9rem;border:none;border-radius:.5rem;padding:.6rem 1.3rem;cursor:pointer}
+.lock-over .price{font-family:var(--sans);font-size:.72rem;color:var(--cool-soft)}
+
+/* state label for the pair */
+.state-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.3rem;margin-top:1rem}
+@media(max-width:860px){.state-grid{grid-template-columns:1fr}}
+.state h5{font-family:var(--sans);font-size:.74rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:0 0 .7rem;display:flex;align-items:center;gap:.5rem}
+.state h5 .pin{width:8px;height:8px;border-radius:50%}
+.mini-concept{background:linear-gradient(170deg,var(--ink-blue),#101a26);border-radius:.8rem;padding:1.2rem 1.2rem 1.3rem}
+.mini-concept .c-name{font-size:1.25rem;margin-bottom:.5rem}
+
+.note{font-family:var(--sans);font-size:.84rem;color:var(--ink-soft);background:var(--paper-2);border:1px solid var(--line);border-radius:.5rem;padding:.85rem 1rem;margin-top:1rem}
+.note b{color:var(--terra-deep)}
+.foot{padding:2.4rem 0 3.5rem;text-align:center;font-family:var(--sans);font-size:.8rem;color:var(--muted)}
+.reco{background:var(--terra-tint);border:1px solid color-mix(in srgb,var(--terra) 30%,var(--line));border-radius:.6rem;padding:1.1rem 1.3rem;font-family:var(--sans);font-size:.9rem;color:var(--terra-deep);margin-top:1.4rem}
+.reco b{font-weight:700}
+</style>
+</head>
+<body>
+
+<header class="hd">
+  <div class="wrap">
+    <span class="brand">寓言集 · <b>概念页设计选项</b></span>
+    <span class="tag">英文精读整合 · 追问（付费）</span>
+  </div>
+</header>
+
+<div class="wrap">
+  <section class="intro">
+    <p class="eyebrow">概念页 · 揭晓之后 / After the reveal</p>
+    <h1>英文精读 + 追问 <span class="en">Deep read &amp; ask</span></h1>
+    <p class="lede">揭晓概念后，把原版那篇<b>英文长文</b>重新接回来——但不破坏现在「中文分层速览」的清爽。下面给你三种整合方式，并附上一个可选的<b>付费「追问」交互</b>设计。所有示例以 <b>SFT 监督微调</b> 为例。</p>
+    <div class="goals">
+      <div class="goal"><div class="n">需求 01</div><h4>英文精读回归</h4><p>原始设计里「show answer」后那段英文文章要展示出来，需整合进当前的概念卡片。</p></div>
+      <div class="goal"><div class="n">需求 02 · 可选付费</div><h4>「追问」交互问答</h4><p>一个输入框，用户就当前概念向 AI 提问、加深理解。倾向做成会员付费功能。</p></div>
+    </div>
+  </section>
+
+  <!-- ════ PART 1 ════ -->
+  <section class="block" id="part1">
+    <div class="sec-head"><span class="sec-no">01</span><h2>英文精读整合 · 三个方向</h2></div>
+    <p class="sec-sub">三种都保留「中文分层」作为快速理解层；区别在于「英文长文」如何登场。卡片可点击体验（切换语言 / 标签）。</p>
+
+    <!-- Option A -->
+    <div class="opt-label"><span class="badge">方案 A</span><h3>语言切换 · 同一套分层，一键切到英文</h3><span class="role">最省空间</span></div>
+    <p class="opt-why">概念卡片右上角加一个 <b>中文 / EN</b> 开关。结构完全不变——展开同一层时，中文显示速览、英文显示原文段落。<b>优点：</b>零额外滚动、信息架构统一。<b>取舍：</b>中英不能同屏对照。</p>
+    <div class="concept" id="cardA">
+      <p class="c-eyebrow">谜底 · The Concept</p>
+      <div class="c-top">
+        <div><h2 class="c-name">SFT</h2><p class="c-zh">监督微调 · 后训练与对齐</p></div>
+        <span class="langseg" data-card="A">
+          <button data-lang="zh">中文</button>
+          <button data-lang="en" class="act">EN</button>
+        </span>
+      </div>
+      <div class="bridge"><b>故事 ↔ 概念　</b><span class="b-zh" hidden>临摹一千封范本 = SFT：用人写好的示范，先教会模型「一个助手该长什么样」。</span><span class="b-en">The apprentice tracing a thousand model letters = SFT: human-written demonstrations teach the model what an assistant should look like before it is ever judged on content.</span></div>
+      <div class="layers" id="layersA"></div>
+    </div>
+
+    <!-- Option B -->
+    <div class="opt-label"><span class="badge pick">方案 B · 推荐</span><h3>中文速览 + 英文精读（上下衔接）</h3><span class="role">最忠于原版</span></div>
+    <p class="opt-why">上半部是中文分层「速览」，下面用一道分隔线引出 <b>英文精读 / Deep Read</b>——把原版那篇英文长文完整、优雅地铺开（衬线排版，保留小标题）。<b>优点：</b>中文给要义、英文给深度，最接近原始的长文阅读体验；先读后练的节奏天然成立。</p>
+    <div class="concept" id="cardB">
+      <p class="c-eyebrow">谜底 · The Concept</p>
+      <h2 class="c-name">SFT</h2>
+      <p class="c-zh">监督微调 · 后训练与对齐</p>
+      <div class="bridge"><b>故事 ↔ 概念　</b>临摹一千封范本 = SFT：用人写好的示范，先教会模型「一个助手该长什么样」。</div>
+      <div class="layers" id="layersB"></div>
+      <div class="deepread-head"><span>英文精读 · DEEP READ</span><span class="line"></span></div>
+      <div class="essay-en" id="essayB"></div>
+    </div>
+
+    <!-- Option C -->
+    <div class="opt-label"><span class="badge">方案 C</span><h3>标签页 · 速览 / 英文精读 切换</h3><span class="role">最清爽</span></div>
+    <p class="opt-why">卡片内做两个标签：<b>速览</b>（中文分层）和 <b>英文精读</b>（英文长文）。一次只看一种深度，不堆成长墙。<b>取舍：</b>多一次点击才能到达英文。</p>
+    <div class="concept" id="cardC">
+      <p class="c-eyebrow">谜底 · The Concept</p>
+      <h2 class="c-name">SFT</h2>
+      <p class="c-zh">监督微调 · 后训练与对齐</p>
+      <div class="bridge"><b>故事 ↔ 概念　</b>临摹一千封范本 = SFT：用人写好的示范，先教会模型「一个助手该长什么样」。</div>
+      <div class="ctabs" data-card="C">
+        <button class="ctab act" data-tab="brief">速览 · 中文</button>
+        <button class="ctab" data-tab="deep">英文精读 · Deep Read</button>
+      </div>
+      <div class="layers tabpane" data-pane="brief" id="layersC"></div>
+      <div class="essay-en tabpane" data-pane="deep" id="essayC" style="display:none"></div>
+    </div>
+
+    <div class="reco"><b>建议：</b>采用 <b>方案 B</b> 作为默认（最忠于原版长文、阅读节奏自然），并在卡片右上保留 <b>方案 A 的中/EN 开关</b>——B 给结构、A 给语言偏好。C 可作为窄屏下的折叠形态。</div>
+  </section>
+
+  <!-- ════ PART 2 ════ -->
+  <section class="block" id="part2">
+    <div class="sec-head"><span class="sec-no">02</span><h2>「追问」· 付费交互问答</h2></div>
+    <p class="sec-sub">在概念卡片底部加一个针对<b>当前概念</b>的提问框。免费用户看到「锁」与样例（升级转化点），会员可无限追问。下面是两种状态的设计。</p>
+
+    <div class="state-grid">
+      <!-- locked -->
+      <div class="state">
+        <h5><span class="pin" style="background:var(--muted)"></span>免费用户 · 升级转化</h5>
+        <div class="mini-concept">
+          <h2 class="c-name">SFT</h2>
+          <div class="ask locked">
+            <div class="ask-top"><span class="ttl">追问</span><span class="pro-badge">◆ PRO</span></div>
+            <p class="ask-sub">就这个概念，问任何不懂的——AI 用你能懂的话回答。</p>
+            <div class="qa">
+              <div class="bub u">为什么只对回答算损失，不对 prompt 算？</div>
+              <div class="bub a">因为我们想让模型学会「<b>怎么回答</b>」，而不是去复述问题本身……</div>
+            </div>
+            <div class="lock-over">
+              <div class="lk"><span class="ic">🔒</span> 解锁「追问」· 会员专享</div>
+              <div class="d">对每一个概念无限提问，把寓言、公式、争议都问到懂为止。</div>
+              <button class="cta">升级会员 →</button>
+              <div class="price">¥18 / 月 · 随时取消</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- unlocked -->
+      <div class="state">
+        <h5><span class="pin" style="background:var(--gold)"></span>会员 · 已解锁</h5>
+        <div class="mini-concept">
+          <h2 class="c-name">SFT</h2>
+          <div class="ask">
+            <div class="ask-top"><span class="ttl">追问</span><span class="pro-badge">◆ PRO</span></div>
+            <div class="qa" id="qaLive">
+              <div class="bub u">为什么只对回答算损失，不对 prompt 算？</div>
+              <div class="bub a">因为目标是教模型「<b>如何回应</b>」，而不是复述问题。Prompt 是给定的条件，对它算损失只会让模型学着背诵问题；只对回答算损失，梯度才会集中在「该说什么」上。</div>
+            </div>
+            <div class="ask-input">
+              <input id="askField" placeholder="再问一个关于 SFT 的问题…" />
+              <button class="send" id="askSend">问</button>
+            </div>
+            <div class="chips" id="askChips">
+              <span class="chip">它和 RLHF 有什么区别？</span>
+              <span class="chip">数据要多少才够？</span>
+              <span class="chip">为什么说它「记忆」而非「泛化」？</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="note"><b>付费与产品考量：</b>① 入口放在概念卡底部，是用户「刚读完、最有疑问」的高意图时刻，转化最好。② 免费用户给 <b>1 次/天</b> 试用额度比纯锁更易转化（先尝甜头）。③ 答案应<b>锚定本概念</b>（带上寓言、桥接、公式做上下文），避免变成通用聊天。④ 与「相关概念」打通——回答里可直接跳到 RLHF / DPO 卡片，强化版图探索。</div>
+  </section>
+</div>
+
+<footer class="foot">寓言集 · 概念页设计选项　·　示例内容为演示用途，英文长文将接入原站真实文章</footer>
+
+<script>
+/* SFT content — Chinese layers + English essay/layers (demo, faithful to original voice) */
+const ZH_LAYERS=[
+  {pill:'TL;DR',title:'一句话',body:'用人类写好的「问题→理想回答」示范来微调，教基础模型像助手一样应答。'},
+  {pill:'机制',title:'关键机制',body:'在 (prompt, response) 对上继续做下一个词预测，但只对「回答」部分计算损失。数据少而精——几千到上百万条高质量示范。'},
+  {pill:'为何重要',title:'为何重要',body:'预训练模型只会「续写」，不会「应答」。SFT 是最便宜、最稳定地装上对话接口的一步，也是 RLHF 的前置起跑线。'},
+  {pill:'前沿',title:'争议与前沿',body:'「SFT 记忆、RL 泛化」——SFT 易过拟合示范风格，在分布外掉点。新共识把它看作 RL 的起跑线，而非终点。'},
+];
+const EN_LAYERS=[
+  {pill:'TL;DR',title:'In one line',body:'Fine-tune a pretrained model on human-written “prompt → ideal response” pairs so it learns to respond like an assistant rather than merely continue text.'},
+  {pill:'Mechanism',title:'Key mechanism',body:'SFT minimizes cross-entropy on the response tokens conditioned on the prompt; the loss is masked so only the assistant’s reply contributes gradients. The dataset is small (10³–10⁶) but high quality.'},
+  {pill:'Why',title:'Why it matters',body:'Pretrained models are excellent next-token predictors but poor assistants. SFT is the cheapest, most stable way to install the assistant interface — and a prerequisite for RL-based alignment.'},
+  {pill:'Frontier',title:'Open questions',body:'“SFT Memorizes, RL Generalizes” (Chu et al., 2025) shows SFT can overfit surface style and degrade out-of-distribution — reframing SFT as the runway for RL, not the destination.'},
+];
+const ESSAY_EN=`<span class="label">Concept &amp; field</span>
+<p>Supervised Fine-Tuning is the first stage of the modern post-training stack for large language models, sitting in the <em>alignment</em> cluster alongside RLHF, DPO, and RLVR. A pretrained base model — already rich with world knowledge from next-token prediction on web text — is further trained on a curated set of <span class="formula">(prompt, response)</span> pairs written or vetted by humans.</p>
+<span class="label">Key mechanism</span>
+<p>Concretely, SFT minimizes cross-entropy on the response tokens conditioned on the prompt: <span class="formula">L = −Σ log p_θ(y_t | x, y_&lt;t)</span>. Loss is typically masked so that only the assistant’s response contributes gradients. The dataset is small relative to pretraining (10³–10⁶ examples) but high quality.</p>
+<span class="label">Why it matters</span>
+<p>Pretrained models are excellent next-token predictors but poor assistants — they continue text rather than respond to it. SFT is the cheapest, most stable way to install the <em>interface</em> of an assistant: turn-taking, instruction-following, the chat format, refusals, and tool-call syntax.</p>
+<span class="label">Open questions &amp; controversies</span>
+<p>Chu et al.’s 2025 paper <em>“SFT Memorizes, RL Generalizes”</em> showed that SFT improves in-distribution accuracy but can degrade out-of-distribution, while RL with outcome rewards generalizes — reframing SFT as a format-stabilizing runway for RL rather than the destination.</p>`;
+
+function layerHTML(arr, enClass){
+  return arr.map((l,i)=>`<div class="layer ${i===0?'open':''}">
+    <button class="layer-h"><span class="pill">${l.pill}</span>${l.title}<span class="chev">›</span></button>
+    <div class="layer-b ${enClass?'en':''}">${l.body}</div>
+  </div>`).join('');
+}
+// A: english layers (since EN toggle active)
+document.getElementById('layersA').innerHTML=layerHTML(EN_LAYERS,true);
+// B: chinese layers + essay
+document.getElementById('layersB').innerHTML=layerHTML(ZH_LAYERS,false);
+document.getElementById('essayB').innerHTML=ESSAY_EN;
+// C: chinese layers (brief) + essay (deep)
+document.getElementById('layersC').innerHTML=layerHTML(ZH_LAYERS,false);
+document.getElementById('essayC').innerHTML=ESSAY_EN;
+
+// layer toggles (all cards)
+document.querySelectorAll('.layer-h').forEach(h=>h.addEventListener('click',()=>h.parentElement.classList.toggle('open')));
+
+// A language toggle
+document.querySelector('.langseg[data-card="A"]').addEventListener('click',e=>{
+  const b=e.target.closest('button'); if(!b)return;
+  const lang=b.dataset.lang;
+  document.querySelectorAll('.langseg[data-card="A"] button').forEach(x=>x.classList.toggle('act',x===b));
+  document.getElementById('layersA').innerHTML=layerHTML(lang==='en'?EN_LAYERS:ZH_LAYERS, lang==='en');
+  document.querySelectorAll('.layer-h').forEach(h=>h.addEventListener('click',()=>h.parentElement.classList.toggle('open')));
+  document.querySelector('#cardA .b-zh').hidden = lang!=='zh';
+  document.querySelector('#cardA .b-en').hidden = lang!=='en';
+});
+
+// C tabs
+document.querySelector('.ctabs[data-card="C"]').addEventListener('click',e=>{
+  const b=e.target.closest('button'); if(!b)return;
+  const tab=b.dataset.tab;
+  document.querySelectorAll('.ctabs[data-card="C"] .ctab').forEach(x=>x.classList.toggle('act',x===b));
+  document.getElementById('layersC').style.display = tab==='brief'?'block':'none';
+  document.getElementById('essayC').style.display = tab==='deep'?'block':'none';
+});
+
+// premium ask demo (unlocked) — fake a reply
+const FAKE={
+  '它和 RLHF 有什么区别？':'SFT 用「标准答案」教模型照着写；RLHF 不给答案，只对模型的产出打分（更好/更差），让它从偏好里学。SFT 是起跑线，RLHF 是之后的精修。',
+  '数据要多少才够？':'通常几千到上百万条，远少于预训练。关键不在多，而在「干净、风格一致、覆盖你要的行为」。',
+  '为什么说它「记忆」而非「泛化」？':'因为 SFT 倾向于背下示范的表面模式；遇到没见过的分布就容易掉点。RL 用结果奖励反而更能泛化——这正是 2025 年那篇论文的发现。',
+};
+function pushQA(q,a){
+  const qa=document.getElementById('qaLive');
+  qa.insertAdjacentHTML('beforeend',`<div class="bub u">${q}</div><div class="bub a">${a}</div>`);
+  qa.parentElement.scrollTop=9999;
+}
+function ask(q){
+  if(!q) return;
+  const a=FAKE[q]||'好问题。会员版会基于这一概念的寓言、桥接与公式，给你量身定制的解释，并在需要时跳转到相关概念卡片。';
+  pushQA(q,a);
+}
+document.getElementById('askSend').addEventListener('click',()=>{ const f=document.getElementById('askField'); ask(f.value.trim()); f.value=''; });
+document.getElementById('askField').addEventListener('keydown',e=>{ if(e.key==='Enter'){ ask(e.target.value.trim()); e.target.value=''; } });
+document.querySelectorAll('#askChips .chip').forEach(c=>c.addEventListener('click',()=>ask(c.textContent)));
+</script>
+</body>
+</html>

@@ -1,0 +1,660 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>寓言集 · 高保真原型</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --paper:#f4efe6; --paper-2:#efe8db; --surface:#e9e0cf; --surface-2:#e2d6c0;
+  --ink:#211c13; --ink-soft:#473e30; --muted:#857a66; --faint:#b8ad97;
+  --line:#dccfb8; --line-strong:#cbbb9e;
+  --terra:#b4522e; --terra-deep:#8f3d1f; --terra-tint:#f0d9cb;
+  --ink-blue:#16212e; --ink-blue-2:#1f2d3d; --cool:#3f6f8f; --cool-soft:#8fb0c4; --gold:#c08a3e;
+  --p0:#c0392b; --p1:#d97b25; --p2:#3678a3; --p3:#9c8f78;
+  --serif:"Newsreader",Georgia,serif; --cjk:"Noto Serif SC",serif;
+  --sans:"Noto Sans SC",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --maxw:54rem;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--cjk);font-size:17px;line-height:1.7;-webkit-font-smoothing:antialiased;
+  background-image:radial-gradient(circle at 12% -8%,#fbf7ef 0%,transparent 42%),radial-gradient(circle at 100% 0,#f6f0e4 0%,transparent 40%);background-attachment:fixed;
+  transition:background-color .5s ease}
+body.cooled{background-color:#e7ded0}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 1.4rem}
+h1,h2,h3,h4,h5{font-family:var(--serif);font-weight:500;letter-spacing:-.01em;line-height:1.15}
+.cjk{font-family:var(--cjk)}
+a{color:var(--terra);text-decoration:none}
+p{margin:0 0 1em}
+.muted{color:var(--muted)}
+.tnum{font-variant-numeric:tabular-nums}
+button{font-family:inherit;cursor:pointer}
+
+/* header */
+.hd{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--paper) 86%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);transition:background-color .5s}
+body.cooled .hd{background:color-mix(in srgb,#e7ded0 86%,transparent)}
+.hd .wrap{display:flex;align-items:center;justify-content:space-between;height:56px;gap:1rem}
+.brand{font-family:var(--cjk);font-weight:700;font-size:1rem;cursor:pointer;background:none;border:none;color:var(--ink);padding:0}
+.brand b{color:var(--terra)}
+.hd-r{display:flex;align-items:center;gap:.9rem;font-family:var(--sans);font-size:.8rem;color:var(--muted)}
+.hd-r button{background:none;border:1px solid var(--line-strong);color:var(--muted);border-radius:.4rem;padding:.3rem .6rem;font-size:.74rem}
+.hd-r button:hover{border-color:var(--terra);color:var(--terra)}
+
+.screen{display:none;opacity:1}
+.screen.on{display:block}
+
+/* ── HOME ── */
+.hero{padding:2.4rem 0 1.2rem}
+.eyebrow{font-family:var(--sans);font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:var(--terra);margin:0 0 .6rem}
+.hero h1{font-size:clamp(2rem,5vw,2.9rem);margin:0 0 .3rem}
+.hero h1 .en{font-style:italic;font-weight:400;color:var(--muted);font-size:.5em}
+.hero p.sub{font-family:var(--cjk);color:var(--ink-soft);font-size:1.05rem;margin:0;max-width:34rem}
+.demo-note{font-family:var(--sans);font-size:.74rem;color:var(--muted);margin-top:.7rem}
+.demo-note b{color:var(--terra-deep)}
+
+/* keep-going strip (demoted, at bottom) */
+.kg{margin:2.4rem 0 3rem;border-top:1px solid var(--line);padding-top:1.3rem}
+.kg-h{font-family:var(--sans);font-size:.7rem;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);margin:0 0 .8rem}
+.mstrip{display:flex;gap:.7rem;flex-wrap:wrap}
+.mtile{background:var(--paper-2);border:1px solid var(--line);border-radius:.55rem;padding:.7rem 1rem;display:flex;align-items:center;gap:.8rem}
+.mtile .lab{font-family:var(--sans);font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0}
+.mtile.resume{cursor:pointer;transition:border-color .15s}
+.mtile.resume:hover{border-color:var(--terra)}
+.mtile.resume .rtext{display:flex;flex-direction:column;gap:.15rem}
+.mtile.resume .rtext b{font-family:var(--cjk);font-weight:600;font-size:.9rem;color:var(--ink-soft)}
+.mtile.resume .go{font-family:var(--sans);font-size:.8rem;font-weight:600;color:var(--terra);white-space:nowrap}
+.mtile.streak .big{font-family:var(--serif);font-weight:600;font-size:1.2rem;font-variant-numeric:tabular-nums;color:var(--ink-soft)}
+.streak-dots{display:flex;gap:4px}
+.streak-dots i{width:10px;height:10px;border-radius:50%;background:var(--surface-2)}
+.streak-dots i.on{background:var(--terra)}
+.streak-dots i.today{background:var(--gold);box-shadow:0 0 0 2px color-mix(in srgb,var(--gold) 28%,transparent)}
+.pri-dot{display:inline-block;width:7px;height:7px;border-radius:50%;vertical-align:middle;margin-right:.3rem}
+
+/* map */
+.map-card{background:var(--paper);border:1px solid var(--line-strong);border-radius:.7rem;box-shadow:0 1px 0 #fff inset,0 10px 32px -20px rgba(70,45,20,.5);overflow:hidden;margin-bottom:3rem}
+.map-top{display:flex;align-items:center;justify-content:space-between;padding:1.1rem 1.3rem .3rem;flex-wrap:wrap;gap:.6rem}
+.map-top h3{font-family:var(--cjk);font-weight:700;font-size:1.2rem;margin:0}
+.map-top .count{font-family:var(--serif);font-weight:600;font-variant-numeric:tabular-nums;font-size:1.05rem;color:var(--ink-soft)}
+.map-top .count b{color:var(--terra);font-size:1.5rem}
+.map-legend{display:flex;gap:1.1rem;flex-wrap:wrap;align-items:center;padding:0 1.3rem .6rem;font-family:var(--sans);font-size:.74rem;color:var(--muted)}
+.map-legend span{display:inline-flex;align-items:center;gap:.42rem}
+.map-legend .lg{width:14px;height:14px;border-radius:3.5px;border:1.6px solid var(--line-strong);background:transparent;display:inline-block;flex-shrink:0}
+.map-legend .lg.read{background:var(--terra);border-color:var(--terra)}
+.map-legend .lg.able{border-style:dashed;border-color:var(--terra);box-shadow:0 0 0 2px var(--terra-tint)}
+.map-legend .lg.next{background:var(--gold);border-color:var(--gold);box-shadow:0 0 0 2px color-mix(in srgb,var(--gold) 35%,transparent)}
+.map-legend .lg.rel{background:transparent;border-color:var(--cool);box-shadow:0 0 0 2px color-mix(in srgb,var(--cool) 40%,transparent)}
+.map-legend .legend-rel{display:none}
+.map-legend .legend-rel.show{display:inline-flex}
+.map-body{padding:.8rem 1.3rem 1.4rem}
+
+/* persona filter */
+.persona-bar{padding:.2rem 1.3rem 1rem}
+.persona-h{font-family:var(--sans);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0 0 .55rem;display:flex;align-items:center;gap:.5rem}
+.pbtns{display:flex;gap:.5rem;flex-wrap:wrap}
+.pbtn{display:flex;flex-direction:column;align-items:flex-start;gap:.05rem;background:var(--paper-2);border:1px solid var(--line-strong);border-radius:.55rem;padding:.45rem .8rem;cursor:pointer;transition:.15s}
+.pbtn:hover{border-color:var(--terra)}
+.pbtn .pl{font-family:var(--cjk);font-weight:600;font-size:.85rem;color:var(--ink-soft)}
+.pbtn .ps{font-family:var(--sans);font-size:.65rem;color:var(--muted)}
+/* persona → highlight EVERY story cell related to the role (non-blocking) */
+.km-pips .pip{transition:box-shadow .2s ease}
+.pip.rel{animation:relPulse 1.9s ease-out infinite}
+.km-pips .pip.rel:nth-child(even){animation-delay:.5s}
+.km-pips .pip.rel:nth-child(3n){animation-delay:.95s}
+@keyframes relPulse{
+  0%{box-shadow:0 0 0 1.5px color-mix(in srgb,var(--cool) 72%,#fff), 0 0 0 0 color-mix(in srgb,var(--cool) 40%,transparent)}
+  70%{box-shadow:0 0 0 1.5px color-mix(in srgb,var(--cool) 72%,#fff), 0 0 0 7px color-mix(in srgb,var(--cool) 0%,transparent)}
+  100%{box-shadow:0 0 0 1.5px color-mix(in srgb,var(--cool) 72%,#fff), 0 0 0 0 color-mix(in srgb,var(--cool) 0%,transparent)}
+}
+@media(prefers-reduced-motion:reduce){.pip.rel{animation:none;box-shadow:0 0 0 1.5px color-mix(in srgb,var(--cool) 72%,#fff)}}
+.persona-rec{display:none}
+/* pip tooltip */
+#tip{position:fixed;left:-9999px;top:-9999px;z-index:70;background:var(--ink-blue);color:#eee4d2;font-family:var(--sans);font-size:.74rem;padding:.32rem .58rem;border-radius:.38rem;pointer-events:none;visibility:hidden;opacity:0;transform:translate(-50%,-100%);transition:opacity .12s;white-space:nowrap;box-shadow:0 8px 20px -8px rgba(0,0,0,.5)}
+#tip.show{visibility:visible;opacity:1}
+
+/* field-guide rows */
+.km-row{display:grid;grid-template-columns:9rem 1fr auto;align-items:center;gap:.85rem;padding:.46rem 0;border-top:1px dashed var(--line)}
+.km-row:first-child{border-top:none}
+.km-name{font-family:var(--cjk);font-size:.85rem;font-weight:500;display:flex;align-items:center;gap:.4rem;line-height:1.2}
+.km-pips{display:flex;gap:5px;flex-wrap:wrap}
+.pip{width:15px;height:15px;border-radius:3.5px;border:1.6px solid var(--line-strong);background:transparent;transition:transform .12s}
+.pip.read{background:var(--terra);border-color:var(--terra)}
+.pip.able{border-color:var(--terra);border-style:dashed;box-shadow:0 0 0 2px var(--terra-tint);cursor:pointer}
+.pip.able:hover{transform:scale(1.22)}
+.pip.read.able{background:var(--terra);border-style:solid;cursor:pointer;box-shadow:none}
+.pip.next{background:var(--gold);border-color:var(--gold);border-style:solid;box-shadow:0 0 0 2px color-mix(in srgb,var(--gold) 38%,transparent);cursor:pointer}
+.pip.next:hover{transform:scale(1.22)}
+.km-ct{font-family:var(--sans);font-size:.74rem;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap;text-align:right}
+.km-ct b{color:var(--ink-soft)}
+@media(max-width:680px){.km-row{grid-template-columns:6.6rem 1fr auto;gap:.5rem}.km-name{font-size:.76rem}}
+
+/* ── STORY SCREEN ── */
+.story{padding:1.6rem 0 4rem;max-width:42rem;margin:0 auto}
+.crumb{display:flex;align-items:center;gap:.5rem;font-family:var(--sans);font-size:.8rem;color:var(--muted);margin-bottom:1.4rem;flex-wrap:wrap}
+.crumb button{background:none;border:none;color:var(--muted);font-size:.8rem;padding:0}
+.crumb button:hover{color:var(--terra)}
+.crumb .sep{color:var(--line-strong)}
+.parable{font-family:var(--cjk);font-size:1.18rem;line-height:2.05;letter-spacing:.01em;color:var(--ink)}
+.parable p{text-indent:2em;margin:0}
+
+/* guess block */
+.guess{margin-top:2.2rem;border-top:1px solid var(--line);padding-top:1.6rem}
+.guess .q{font-family:var(--cjk);font-size:1rem;font-weight:600;margin:0 0 .9rem;display:flex;align-items:center;gap:.5rem}
+.guess .q .badge{font-family:var(--sans);font-size:.62rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#fff;background:var(--terra);border-radius:1rem;padding:.16rem .5rem}
+.gchips{display:flex;flex-direction:column;gap:.55rem}
+.gchip{display:flex;align-items:center;gap:.6rem;font-family:var(--cjk);font-size:.95rem;border:1.5px solid var(--line-strong);border-radius:.55rem;padding:.7rem .9rem;color:var(--ink-soft);background:var(--paper);text-align:left;transition:.14s}
+.gchip:hover{border-color:var(--terra)}
+.gchip .key{font-family:var(--sans);font-size:.74rem;font-weight:700;color:var(--muted);border:1px solid var(--line-strong);border-radius:.3rem;width:1.5rem;height:1.5rem;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.gchip.sel{border-color:var(--terra);background:var(--terra-tint);color:var(--terra-deep);font-weight:600}
+.gchip.sel .key{background:var(--terra);color:#fff;border-color:var(--terra)}
+.gchip.skip{font-family:var(--sans);font-size:.85rem;color:var(--muted);border-style:dashed;justify-content:center}
+.reveal-row{margin-top:1.5rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
+.reveal-btn{background:var(--terra);color:#fff;border:none;border-radius:.55rem;padding:.85rem 2rem;font-family:var(--cjk);font-size:1.05rem;font-weight:600;transition:.15s;box-shadow:0 6px 18px -8px var(--terra)}
+.reveal-btn:hover{transform:translateY(-2px);background:var(--terra-deep)}
+.reveal-hint{font-family:var(--sans);font-size:.8rem;color:var(--muted)}
+
+/* concept panel (cool) */
+.concept{margin-top:2.2rem;background:linear-gradient(170deg,var(--ink-blue),#101a26);color:#e9e0cf;border-radius:.9rem;padding:1.8rem 1.7rem 1.5rem;box-shadow:0 24px 60px -28px rgba(16,26,38,.7)}
+.concept[hidden]{display:none}
+.gfeedback{font-family:var(--sans);font-size:.82rem;border-radius:.5rem;padding:.6rem .85rem;margin:0 0 1.1rem;display:flex;align-items:center;gap:.5rem}
+.gfeedback.right{background:rgba(96,150,96,.18);color:#bfe0bf;border:1px solid rgba(96,150,96,.35)}
+.gfeedback.wrong{background:rgba(192,138,62,.16);color:#e3c391;border:1px solid rgba(192,138,62,.4)}
+.c-eyebrow{font-family:var(--sans);font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--cool-soft);margin:0 0 .4rem}
+.c-name{font-family:var(--serif);font-weight:600;font-size:2rem;color:#eaae84;margin:0 0 .15rem;line-height:1.1}
+.c-zh{font-family:var(--cjk);font-size:.95rem;color:var(--cool-soft);margin:0 0 1.1rem}
+.bridge{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-left:3px solid var(--gold);border-radius:.45rem;padding:.85rem 1rem;font-family:var(--sans);font-size:.88rem;line-height:1.6;margin:0 0 1.2rem;color:#ddd3bf}
+.bridge b{color:var(--gold);font-weight:600}
+.layers{border-top:1px solid rgba(255,255,255,.12)}
+.layer{border-bottom:1px solid rgba(255,255,255,.1)}
+.layer-h{display:flex;align-items:center;gap:.6rem;width:100%;background:none;border:none;color:#e9e0cf;padding:.85rem 0;font-family:var(--cjk);font-weight:600;font-size:1rem;text-align:left}
+.layer-h .pill{font-family:var(--sans);font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:var(--cool-soft);border:1px solid rgba(143,176,196,.4);border-radius:1rem;padding:.12rem .5rem;font-weight:600;flex-shrink:0}
+.layer-h .chev{margin-left:auto;color:var(--cool-soft);transition:transform .2s;font-size:.8rem}
+.layer.open .layer-h .chev{transform:rotate(90deg)}
+.layer-b{font-family:var(--sans);font-size:.9rem;line-height:1.68;color:#c4bba6;display:none;padding:0 0 1rem}
+.layer.open .layer-b{display:block}
+
+/* english deep-read (方案 B) */
+.deepread-head{display:flex;align-items:center;gap:.7rem;margin:1.7rem 0 1rem;color:var(--cool-soft)}
+.deepread-head .line{flex:1;height:1px;background:rgba(255,255,255,.14)}
+.deepread-head span{font-family:var(--sans);font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;white-space:nowrap}
+.essay-en{font-family:var(--serif);font-size:1.04rem;line-height:1.78;color:#d8cfba;max-width:42em}
+.essay-en p{margin:0 0 1em;text-indent:0}
+.essay-en .label{display:block;font-family:var(--sans);font-size:.7rem;font-weight:650;letter-spacing:.1em;text-transform:uppercase;color:#eaae84;margin:1.6em 0 .4em}
+.essay-en .label:first-child{margin-top:0}
+.essay-en em{color:#cbbfa7;font-style:italic}
+.essay-en .formula{display:inline-block;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.86em;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:.3rem;padding:.05em .4em;color:#e6dcc6}
+/* references */
+.sources{margin-top:1.7rem;padding-top:1rem;border-top:1px solid rgba(255,255,255,.12)}
+.sources h4{font-family:var(--sans);font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--cool-soft);margin:0 0 .6rem}
+.sources ul{margin:0;padding:0;list-style:none}
+.sources li{margin-bottom:.45rem;font-family:var(--sans);font-size:.83rem;line-height:1.5;display:flex;gap:.4rem}
+.sources .src-num{color:var(--cool-soft);flex-shrink:0}
+.sources a{color:#9fc0d4;text-decoration:none;border-bottom:1px solid rgba(159,192,212,.35)}
+.sources a:hover{color:#eaae84;border-bottom-color:#eaae84}
+/* premium ask / 追问 */
+.ask{margin-top:1.7rem;border:1px solid rgba(192,138,62,.42);background:linear-gradient(180deg,rgba(192,138,62,.1),rgba(192,138,62,.02));border-radius:.7rem;padding:1.1rem 1.2rem;position:relative;overflow:hidden}
+.ask-top{display:flex;align-items:center;gap:.55rem;margin-bottom:.5rem}
+.ask-top .ttl{font-family:var(--cjk);font-weight:700;font-size:1rem;color:#f0e6d2}
+.pro-badge{font-family:var(--sans);font-size:.6rem;font-weight:700;letter-spacing:.1em;color:#1a1205;background:linear-gradient(90deg,#e7b86a,var(--gold));border-radius:1rem;padding:.16rem .55rem}
+.ask-sub{font-family:var(--sans);font-size:.78rem;color:var(--cool-soft);margin:0 0 .85rem}
+.qa{display:flex;flex-direction:column;gap:.6rem;margin-bottom:.9rem}
+.bub{font-family:var(--sans);font-size:.84rem;line-height:1.55;border-radius:.7rem;padding:.6rem .85rem;max-width:88%}
+.bub.u{align-self:flex-end;background:var(--cool);color:#eaf2f7;border-bottom-right-radius:.2rem}
+.bub.a{align-self:flex-start;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:#d4cab4;border-bottom-left-radius:.2rem}
+.bub.a b{color:#eaae84;font-weight:600}
+.ask-input{display:flex;gap:.5rem;align-items:center;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16);border-radius:.6rem;padding:.4rem .4rem .4rem .9rem}
+.ask-input input{flex:1;background:none;border:none;outline:none;color:#e9e0cf;font-family:var(--cjk);font-size:.88rem}
+.ask-input input::placeholder{color:var(--cool-soft)}
+.ask-input .send{background:var(--gold);color:#1a1205;border:none;border-radius:.45rem;padding:.45rem .9rem;font-family:var(--cjk);font-weight:600;font-size:.85rem;cursor:pointer}
+.chips{display:flex;gap:.45rem;flex-wrap:wrap;margin-top:.7rem}
+.chip{font-family:var(--sans);font-size:.76rem;color:var(--cool-soft);border:1px solid rgba(143,176,196,.35);border-radius:2rem;padding:.3rem .7rem;cursor:pointer}
+.chip:hover{border-color:#eaae84;color:#eaae84}
+.ask.locked .ask-input,.ask.locked .chips{display:none}
+.ask.locked .qa{filter:blur(3.5px);opacity:.55;pointer-events:none;user-select:none}
+.ask:not(.locked) .lock-over{display:none}
+.lock-over{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:1.2rem;background:linear-gradient(180deg,rgba(20,18,10,.34),rgba(20,18,10,.56))}
+.lock-over .cta{background:linear-gradient(90deg,#e7b86a,var(--gold));color:#1a1205;font-family:var(--cjk);font-weight:700;font-size:.92rem;border:none;border-radius:.5rem;padding:.55rem 1.6rem;cursor:pointer}
+
+.milestone{margin-top:1.4rem;display:flex;align-items:center;gap:.7rem;background:linear-gradient(100deg,rgba(192,138,62,.2),rgba(192,138,62,.05));border:1px solid rgba(192,138,62,.4);border-radius:.55rem;padding:.8rem 1rem;font-family:var(--cjk);font-weight:600;font-size:.92rem;color:#eecb94}
+.milestone[hidden]{display:none}
+.milestone .ic{font-size:1.3rem}
+
+.related{margin-top:1.5rem}
+.related .rh{font-family:var(--sans);font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--cool-soft);margin:0 0 .6rem}
+.rchips{display:flex;gap:.5rem;flex-wrap:wrap}
+.rchip{display:inline-flex;align-items:center;gap:.4rem;font-family:var(--cjk);font-size:.85rem;border:1px solid rgba(255,255,255,.2);border-radius:2rem;padding:.35rem .8rem;color:#d8cfb9;background:rgba(255,255,255,.04)}
+.rchip.able{cursor:pointer;border-color:rgba(234,174,132,.5);color:#eaae84}
+.rchip.able:hover{background:rgba(234,174,132,.12)}
+.rchip .pri-dot{margin-right:0}
+.rchip .lock{font-size:.66rem;color:var(--cool-soft);font-family:var(--sans)}
+
+.story-foot{display:flex;justify-content:space-between;align-items:center;margin-top:2.4rem;gap:1rem;flex-wrap:wrap}
+.foot-btn{font-family:var(--cjk);font-size:.92rem;border:1px solid var(--line-strong);background:var(--paper);color:var(--ink-soft);border-radius:.5rem;padding:.6rem 1.1rem;display:inline-flex;align-items:center;gap:.4rem}
+.foot-btn:hover{border-color:var(--terra);color:var(--terra-deep)}
+.foot-btn.primary{background:var(--terra);color:#fff;border-color:var(--terra)}
+.foot-btn.primary:hover{background:var(--terra-deep);color:#fff}
+
+/* toast */
+#toast{position:fixed;left:50%;bottom:2rem;transform:translateX(-50%) translateY(140%);background:var(--ink-blue);color:#eee4d2;font-family:var(--cjk);font-size:.88rem;padding:.7rem 1.2rem;border-radius:.6rem;box-shadow:0 14px 36px -14px rgba(0,0,0,.5);z-index:60;transition:transform .35s cubic-bezier(.2,1,.3,1);max-width:88vw}
+#toast.show{transform:translateX(-50%) translateY(0)}
+
+.foot{padding:2rem 0 3rem;text-align:center;font-family:var(--sans);font-size:.78rem;color:var(--muted)}
+</style>
+</head>
+<body>
+
+<header class="hd">
+  <div class="wrap">
+    <button class="brand" onclick="go('')">寓言集 · <b>LLM Parables</b></button>
+    <div class="hd-r">
+      <span class="tnum" id="hdCount">0 / 100</span>
+      <button onclick="resetDemo()">重置演示</button>
+    </div>
+  </div>
+</header>
+
+<!-- ════ HOME ════ -->
+<main class="screen" id="screen-home">
+  <div class="wrap">
+    <section class="hero">
+      <p class="eyebrow">高保真原型 · 知识版图 + 先猜后揭</p>
+      <h1>寓言集 <span class="en">先读故事，再揭晓概念</span></h1>
+      <p class="sub">百篇中文寓言，照亮一百个大语言模型核心概念。</p>
+      <p class="demo-note">演示版收录 <b>8 篇</b> 精选故事。读完一篇，看版图被点亮。</p>
+    </section>
+
+    <section class="map-card">
+      <div class="map-top">
+        <div><h3>我的知识版图</h3></div>
+        <span class="count"><b id="mapCount">0</b> / 100</span>
+      </div>
+      <div class="persona-bar">
+        <p class="persona-h">选择身份 · 高亮与你相关的故事</p>
+        <div class="pbtns" id="personaBar"></div>
+      </div>
+      <div class="map-legend">
+        <span><i class="lg next"></i>下一篇</span>
+        <span><i class="lg able"></i>可读</span>
+        <span><i class="lg read"></i>已读</span>
+        <span><i class="lg"></i>未读</span>
+        <span class="legend-rel"><i class="lg rel"></i>与你相关</span>
+      </div>
+      <div class="map-body" id="mapBody"></div>
+    </section>
+
+    <section class="kg">
+      <p class="kg-h">继续学习 · Keep going</p>
+      <div class="mstrip" id="mstrip"><!-- streak + resume --></div>
+    </section>
+  </div>
+</main>
+
+<!-- ════ STORY ════ -->
+<main class="screen" id="screen-story">
+  <div class="wrap">
+    <article class="story" id="storyBody"></article>
+  </div>
+</main>
+
+<footer class="foot">寓言集 · 高保真原型 　·　 进度、连续天数、已读状态均存于本地浏览器，可随时「重置演示」</footer>
+
+<div id="toast"></div>
+<div id="tip"></div>
+
+<script src="proto-data.js"></script>
+<script>
+/* ── state ── */
+const KEY='llmkb.proto.v2';
+function todayStr(){return new Date().toISOString().slice(0,10);}
+function load(){
+  let s=null; try{s=JSON.parse(localStorage.getItem(KEY));}catch{}
+  if(!s){ s={read:[...SEED_READ], streak:5, lastDate:todayStr(), last:null, miles:[]}; save(s); }
+  return s;
+}
+function save(s){ localStorage.setItem(KEY,JSON.stringify(s)); }
+let STATE=load();
+function readSet(){return new Set(STATE.read);}
+function isRead(id){return readSet().has(id);}
+function readCount(){return STATE.read.length;}
+function markRead(id){ if(!STATE.read.includes(id)){STATE.read.push(id);} STATE.last=id; save(STATE); }
+
+function resetDemo(){ localStorage.removeItem(KEY); STATE=load(); toast('已重置演示进度'); route(); }
+
+/* streak bump on load */
+(function streakInit(){
+  const t=todayStr();
+  if(STATE.lastDate!==t){
+    const y=new Date(Date.now()-864e5).toISOString().slice(0,10);
+    STATE.streak = (STATE.lastDate===y)? STATE.streak+1 : 1;
+    STATE.lastDate=t; save(STATE);
+  }
+})();
+
+/* ── helpers ── */
+function clusterOf(slug){return CLUSTERS.find(c=>c.slug===slug);}
+function firstUnreadPath(){ return PATH.find(id=>!isRead(id)) || PATH[PATH.length-1]; }
+function teaser(s){ return s.parable.replace(/[「」]/g,'').slice(0,16)+'…'; }
+
+/* ── routing ── */
+function go(hash){ location.hash = hash; }
+window.addEventListener('hashchange', route);
+function route(){
+  const h=location.hash.replace(/^#\/?/,'');
+  if(h.startsWith('s/')){ renderStory(h.slice(2)); showScreen('story'); }
+  else { renderHome(); showScreen('home'); }
+  updateHd();
+  window.scrollTo(0,0);
+}
+function showScreen(name){
+  document.body.classList.toggle('cooled', name==='story' && currentRevealed);
+  document.getElementById('screen-home').classList.toggle('on',name==='home');
+  document.getElementById('screen-story').classList.toggle('on',name==='story');
+}
+function updateHd(){
+  document.getElementById('hdCount').textContent = readCount()+' / 100';
+}
+
+/* ── HOME render ── */
+function renderHome(){
+  currentRevealed=false; document.body.classList.remove('cooled');
+  renderMap(); renderPersonas(); applyPersona(); initTooltip(); renderMomentum();
+  document.getElementById('mapCount').textContent=readCount();
+}
+
+function renderMomentum(){
+  const cont = STORY_BY_ID.get(STATE.last && !isRead(STATE.last) ? STATE.last : firstUnreadPath());
+  const cc = clusterOf(cont.cluster);
+  const dots = Array.from({length:7},(_,i)=> i<STATE.streak-1?'on': i===STATE.streak-1?'today':'').map(c=>`<i class="${c}"></i>`).join('');
+  document.getElementById('mstrip').innerHTML = `
+    <div class="mtile resume" onclick="go('/s/${cont.id}')">
+      <div class="rtext"><span class="lab">继续上次</span><b>${cc.zh} · 故事 #${cont.pos+1}</b></div>
+      <span class="go">接着读 →</span>
+    </div>
+    <div class="mtile streak">
+      <span class="lab">连续</span>
+      <span class="big">${STATE.streak} 天</span>
+      <span class="streak-dots">${dots}</span>
+    </div>`;
+}
+
+function renderMap(){
+  document.getElementById('mapBody').innerHTML=mapRows();
+  bindPips();
+}
+function mapRows(){
+  const nextId=firstUnreadPath();
+  return CLUSTERS.map(c=>{
+    let read=0, pips='';
+    for(let i=0;i<c.n;i++){
+      const st=STORY_AT.get(`${c.slug}#${i}`);
+      const id=st?st.id:`${c.slug}#${i}`;
+      const r=isRead(id); if(r)read++;
+      const able=!!st;
+      const isNext=able && !r && id===nextId;
+      let tip;
+      if(!able){ tip = r ? `已探索 · #${i+1}` : `故事 #${i+1} · 演示未收录`; }
+      else if(isNext){ tip = `下一篇 · ${teaser(st)}`; }
+      else if(r){ tip = `已读 · ${st.conceptZh}`; }
+      else { tip = teaser(st); }
+      pips+=`<span class="pip ${r?'read':''} ${able?'able':''} ${isNext?'next':''}" data-id="${id}" data-able="${able}" data-tip="${tip}"></span>`;
+    }
+    return `<div class="km-row" data-cluster="${c.slug}">
+      <div class="km-name"><span class="pri-dot" style="background:${PRI_COLOR[c.pri]}"></span>${c.zh}</div>
+      <div class="km-pips">${pips}</div>
+      <div class="km-ct"><b>${read}</b>/${c.n}</div>
+    </div>`;
+  }).join('');
+}
+function bindPips(){
+  document.querySelectorAll('[data-able="true"]').forEach(el=>{
+    el.addEventListener('click',()=>go('/s/'+el.dataset.id));
+  });
+}
+
+/* ── persona filter ── */
+const PERSONAS=[
+  {id:'self',    label:'AI / LLM 自学者',   sub:'系统打基础', clusters:['arch','scaling','icl','align','itc','interp','eval']},
+  {id:'eng',     label:'工程师',            sub:'落地与部署', clusters:['align','itc','longctx','retrieval','agent','eff']},
+  {id:'curious', label:'了解大模型概念',     sub:'抓住大思想', clusters:['itc','align','agent','safety','scaling']},
+];
+let activePersona=null;
+function renderPersonas(){
+  const bar=document.getElementById('personaBar');
+  bar.innerHTML=PERSONAS.map(p=>`<button class="pbtn" data-p="${p.id}"><span class="pl">${p.label}</span><span class="ps">${p.sub}</span></button>`).join('');
+  bar.querySelectorAll('.pbtn').forEach(b=>b.addEventListener('click',()=>{
+    activePersona = activePersona===b.dataset.p ? null : b.dataset.p;
+    applyPersona();
+  }));
+}
+function applyPersona(){
+  const body=document.getElementById('mapBody');
+  body.querySelectorAll('.pip.rel').forEach(p=>p.classList.remove('rel'));
+  const p=PERSONAS.find(x=>x.id===activePersona);
+  const relLegend=document.querySelector('.legend-rel'); if(relLegend) relLegend.classList.toggle('show', !!p);
+  if(!p) return;
+  body.querySelectorAll('.km-row').forEach(row=>{
+    if(p.clusters.includes(row.dataset.cluster)){
+      row.querySelectorAll('.pip').forEach(pip=>pip.classList.add('rel'));
+    }
+  });
+}
+let _tipBound=false;
+function initTooltip(){
+  if(_tipBound) return; _tipBound=true;
+  const tip=document.getElementById('tip');
+  const body=document.getElementById('mapBody');
+  body.addEventListener('mouseover',e=>{
+    const pip=e.target.closest('.pip'); if(!pip||!pip.dataset.tip)return;
+    tip.textContent=pip.dataset.tip;
+    const r=pip.getBoundingClientRect();
+    tip.style.left=(r.left+r.width/2)+'px';
+    tip.style.top=(r.top-8)+'px';
+    tip.classList.add('show');
+  });  body.addEventListener('mouseout',e=>{ if(e.target.closest('.pip')) tip.classList.remove('show'); });
+  body.addEventListener('mouseleave',()=>tip.classList.remove('show'));
+}
+
+/* ── STORY render ── */
+let currentRevealed=false;
+let pickedGuess=null;
+function renderStory(id){
+  const s=STORY_BY_ID.get(id);
+  if(!s){ go(''); return; }
+  currentRevealed=false; pickedGuess=null;
+  const c=clusterOf(s.cluster);
+  const guessHtml = s.guesses.map((g,i)=>
+    `<button class="gchip" data-i="${i}" data-correct="${!!g.correct}">
+       <span class="key">${String.fromCharCode(65+i)}</span><span>${g.label}</span>
+     </button>`).join('')
+    + `<button class="gchip skip" id="skipGuess">我不确定，直接揭晓</button>`;
+
+  document.getElementById('storyBody').innerHTML = `
+    <div class="crumb">
+      <button onclick="go('')">← 版图</button><span class="sep">·</span>
+      <button onclick="go('')">${c.zh}</button><span class="sep">·</span>
+      <span>故事 #${s.pos+1}</span>
+    </div>
+    <div class="parable"><p>${s.parable}</p></div>
+
+    <div class="guess" id="guessBlock">
+      <p class="q"><span class="badge">先猜</span>揭晓前，先押一个猜测 · 你觉得这讲的是？</p>
+      <div class="gchips">${guessHtml}</div>
+      <div class="reveal-row">
+        <button class="reveal-btn" id="revealBtn">揭晓谜底</button>
+        <span class="reveal-hint" id="revealHint">选一个猜测，会更难忘 · 也可直接揭晓</span>
+      </div>
+    </div>
+
+    <section class="concept" id="conceptPanel" hidden></section>
+  `;
+
+  // guess interactions
+  document.querySelectorAll('#guessBlock .gchip:not(.skip)').forEach(ch=>{
+    ch.addEventListener('click',()=>{
+      document.querySelectorAll('#guessBlock .gchip').forEach(x=>x.classList.remove('sel'));
+      ch.classList.add('sel');
+      pickedGuess={i:+ch.dataset.i, correct:ch.dataset.correct==='true', label:ch.querySelector('span:last-child').textContent};
+      document.getElementById('revealHint').textContent='已押注 · 揭晓看看？';
+    });
+  });
+  document.getElementById('skipGuess').addEventListener('click',()=>{ pickedGuess=null; reveal(s); });
+  document.getElementById('revealBtn').addEventListener('click',()=>reveal(s));
+}
+
+function reveal(s){
+  if(currentRevealed) return;
+  currentRevealed=true;
+  const before=readCount();
+  markRead(s.id);
+  const after=readCount();
+  document.body.classList.add('cooled');
+
+  // milestone check
+  const MILES=[10,25,50,100];
+  let crossed=null;
+  MILES.forEach(m=>{ if(before<m && after>=m && !STATE.miles.includes(m)){crossed=m; STATE.miles.push(m); save(STATE);} });
+  // cluster half
+  const c=clusterOf(s.cluster);
+  let clusterRead=0; for(let i=0;i<c.n;i++){const st=STORY_AT.get(`${c.slug}#${i}`);const id=st?st.id:`${c.slug}#${i}`; if(isRead(id))clusterRead++;}
+
+  let feedback='';
+  if(pickedGuess){
+    feedback = pickedGuess.correct
+      ? `<div class="gfeedback right">✓ 猜对了！你押的「${pickedGuess.label}」正是答案——这下更记得牢了。</div>`
+      : `<div class="gfeedback wrong">↺ 你押的是「${pickedGuess.label}」。再看一眼——其实是下面这个。猜错的瞬间，记忆最深。</div>`;
+  }
+  let milestoneHtml = crossed
+    ? `<div class="milestone"><span class="ic">◆</span>里程碑 · 你已点亮 ${crossed} 篇概念！整片版图正在亮起来。</div>`
+    : (clusterRead>=Math.ceil(c.n/2) && clusterRead<c.n
+        ? `<div class="milestone"><span class="ic">◆</span>你已读完「${c.zh}」群的 ${clusterRead}/${c.n} 篇——过半了！</div>`
+        : '');
+
+  const layers = s.layers.map((l,i)=>`
+    <div class="layer ${i===0?'open':''}">
+      <button class="layer-h"><span class="pill">${l.pill}</span>${l.title}<span class="chev">›</span></button>
+      <div class="layer-b">${l.body}</div>
+    </div>`).join('');
+
+  const related = s.related.map(rid=>{
+    if(isAuthored(rid)){ const rs=STORY_BY_ID.get(rid);
+      return `<button class="rchip able" onclick="go('/s/${rid}')"><span class="pri-dot" style="background:${PRI_COLOR[rs.priority]}"></span>${rs.conceptZh}</button>`;
+    }
+    return `<span class="rchip"><span class="lock">演示未收录</span></span>`;
+  }).join('');
+  const hasAuthoredRel = s.related.some(isAuthored);
+
+  // 方案 B: English deep-read + hyperlinked references
+  const deepReadHtml = s.essayEn ? `
+    <div class="deepread-head"><span>英文精读 · Deep Read</span><span class="line"></span></div>
+    <div class="essay-en">${s.essayEn}</div>` : '';
+  const sourcesHtml = (s.sources && s.sources.length) ? `
+    <div class="sources">
+      <h4>来源 · References</h4>
+      <ul>${s.sources.map((r,i)=>`<li><span class="src-num">[${i+1}]</span><a href="${r.url}" target="_blank" rel="noopener">${r.label}</a></li>`).join('')}</ul>
+    </div>` : '';
+  // premium 追问 module (locked by default; unlock is a demo toggle)
+  const askHtml = `
+    <div class="ask locked" id="askModule">
+      <div class="ask-top"><span class="ttl">追问</span><span class="pro-badge">◆ PRO</span></div>
+      <p class="ask-sub">就这个概念向 AI 追问，问到懂为止。</p>
+      <div class="qa" id="qaLive">
+        <div class="bub u">能用一句最简单的话再讲一次吗？</div>
+        <div class="bub a">（示例）${s.layers[0].body}</div>
+      </div>
+      <div class="ask-input">
+        <input id="askField" placeholder="问一个关于「${s.conceptZh}」的问题…" />
+        <button class="send" id="askSend">问</button>
+      </div>
+      <div class="chips" id="askChips">
+        <span class="chip">用更简单的话再讲一次</span>
+        <span class="chip">举个例子</span>
+        <span class="chip">和相关概念有什么区别？</span>
+      </div>
+      <div class="lock-over">
+        <button class="cta" id="unlockBtn">解锁</button>
+      </div>
+    </div>`;
+
+  // next in path
+  const nextId=firstUnreadPath();
+  const nextS=STORY_BY_ID.get(nextId);
+  const nextHtml = (nextId && nextId!==s.id)
+    ? `<button class="foot-btn primary" onclick="go('/s/${nextId}')">路径下一站 · ${clusterOf(nextS.cluster).zh} →</button>`
+    : `<button class="foot-btn primary" onclick="go('')">回到版图 →</button>`;
+
+  const panel=document.getElementById('conceptPanel');
+  panel.innerHTML = `
+    ${feedback}
+    <p class="c-eyebrow">谜底 · The Concept</p>
+    <h2 class="c-name">${s.concept}</h2>
+    <p class="c-zh">${s.conceptZh} · ${c.zh}</p>
+    <div class="bridge"><b>故事 ↔ 概念　</b>${s.bridge}</div>
+    <div class="layers">${layers}</div>
+    ${deepReadHtml}
+    ${sourcesHtml}
+    ${milestoneHtml}
+    ${askHtml}
+    <div class="related">
+      <p class="rh">${hasAuthoredRel?'顺着这条线索 · 相关概念':'相关概念'}</p>
+      <div class="rchips">${related}</div>
+    </div>
+  `;
+  panel.hidden=false;
+
+  // layer toggles
+  panel.querySelectorAll('.layer-h').forEach(h=>{
+    h.addEventListener('click',()=>h.parentElement.classList.toggle('open'));
+  });
+
+  // premium 追问 module
+  const askModule=panel.querySelector('#askModule');
+  const unlockBtn=panel.querySelector('#unlockBtn');
+  if(unlockBtn) unlockBtn.addEventListener('click',()=>{ askModule.classList.remove('locked'); toast('已解锁「追问」· 演示'); });
+  const askField=panel.querySelector('#askField');
+  const askSend=panel.querySelector('#askSend');
+  const qaLive=panel.querySelector('#qaLive');
+  function pushAsk(q){
+    if(!q) return;
+    const a='（演示回答）针对「'+s.conceptZh+'」：会员版会结合这个概念的寓言、桥接与公式，用你能懂的话解释，并在需要时跳转到相关概念卡片。';
+    qaLive.insertAdjacentHTML('beforeend',`<div class="bub u">${q}</div><div class="bub a">${a}</div>`);
+  }
+  if(askSend) askSend.addEventListener('click',()=>{ pushAsk(askField.value.trim()); askField.value=''; });
+  if(askField) askField.addEventListener('keydown',e=>{ if(e.key==='Enter'){ pushAsk(askField.value.trim()); askField.value=''; }});
+  panel.querySelectorAll('#askChips .chip').forEach(ch=>ch.addEventListener('click',()=>pushAsk(ch.textContent)));
+
+  // hide guess block, append footer nav after panel
+  document.getElementById('guessBlock').style.display='none';
+  const foot=document.createElement('div');
+  foot.className='story-foot';
+  foot.innerHTML=`<button class="foot-btn" onclick="go('')">← 知识版图</button>${nextHtml}`;
+  document.getElementById('storyBody').appendChild(foot);
+
+  panel.scrollIntoView({behavior:'smooth',block:'start'});
+  if(crossed) burst();
+}
+
+/* tiny milestone burst (no libraries) */
+function burst(){
+  toast('🎉 解锁里程碑！');
+}
+let toastTimer=null;
+function toast(msg){
+  const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
+  clearTimeout(toastTimer); toastTimer=setTimeout(()=>t.classList.remove('show'),2600);
+}
+
+/* keyboard: A/B/C to guess on story */
+document.addEventListener('keydown',e=>{
+  if(!document.getElementById('screen-story').classList.contains('on')||currentRevealed)return;
+  const k=e.key.toUpperCase();
+  if(['A','B','C','D'].includes(k)){ const i=k.charCodeAt(0)-65; const ch=document.querySelector(`#guessBlock .gchip[data-i="${i}"]`); if(ch)ch.click(); }
+  if(e.key==='Enter'){ const b=document.getElementById('revealBtn'); if(b)b.click(); }
+});
+
+route();
+</script>
+</body>
+</html>

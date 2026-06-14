@@ -1,0 +1,14 @@
+---
+export interface Props {
+  scope: 'all' | string;
+  max: number;
+}
+
+const { scope, max } = Astro.props;
+---
+<div class="progress" data-progress-scope={scope} data-max={max}>
+  <div class="progress-track">
+    <div class="progress-fill" style="width:0%"></div>
+  </div>
+  <span class="progress-label">0 / {max}</span>
+</div>

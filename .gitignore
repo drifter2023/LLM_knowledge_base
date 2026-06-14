@@ -1,0 +1,13 @@
+# OS
+.DS_Store
+
+# Node / build artifacts
+node_modules/
+dist/
+.astro/
+*.log
+
+# Local env / secrets (never commit)
+.env
+.env.*
+.dev.vars

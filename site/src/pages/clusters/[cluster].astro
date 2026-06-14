@@ -1,0 +1,54 @@
+---
+import { getCollection } from 'astro:content';
+import { clusters, clusterBySlug } from '../../data/clusters';
+import Base from '../../layouts/Base.astro';
+import PriorityBadge from '../../components/PriorityBadge.astro';
+import ProgressBar from '../../components/ProgressBar.astro';
+import StoryCard from '../../components/StoryCard.astro';
+
+export async function getStaticPaths() {
+  return clusters.map((c) => ({ params: { cluster: c.slug } }));
+}
+
+const { cluster: slug } = Astro.params;
+const c = clusterBySlug.get(slug);
+if (!c) throw new Error(`Unknown cluster slug: ${slug}`);
+
+const entries = await getCollection('stories');
+const entryById = new Map(entries.map((e) => [e.id, e]));
+---
+
+<Base
+  title={`${c.zh} · 寓言集`}
+  description={`${c.en} — ${c.storyOrder.length} 篇寓言，探索 ${c.zh} 相关概念。`}
+>
+  <div class="cluster-page-header">
+    <a href="/" class="back-link">← 返回首页</a>
+    <h1 class="cluster-page-title">
+      <span>#{c.num} {c.zh}</span>
+      <PriorityBadge priority={c.priority} />
+    </h1>
+    <p class="cluster-page-en">{c.en}</p>
+    <ProgressBar scope={c.slug} max={c.storyOrder.length} />
+  </div>
+
+  <div class="story-list">
+    {c.storyOrder.map((id, idx) => {
+      const entryId = `${c.slug}/${id}`;
+      const entry = entryById.get(entryId);
+      if (!entry) throw new Error(`Missing story entry for id "${entryId}" in cluster "${c.slug}"`);
+      return (
+        <StoryCard
+          clusterSlug={c.slug}
+          n={idx + 1}
+          storyId={id}
+          concept={entry.data.concept}
+        />
+      );
+    })}
+  </div>
+</Base>
+
+<script>
+  import '../../scripts/enhance-lists';
+</script>

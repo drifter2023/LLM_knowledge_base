@@ -1,0 +1,50 @@
+---
+import Base from '../layouts/Base.astro';
+import Search from 'astro-pagefind/components/Search.astro';
+---
+
+<Base title="参考模式 · Search">
+  <div class="search-page">
+    <header class="search-header">
+      <h1>参考模式 · Reference Mode</h1>
+      <p class="search-subtitle">按概念名称检索故事 · Search stories by concept name</p>
+    </header>
+
+    <div class="spoiler-warning" role="alert">
+      <span class="spoiler-warning-icon">⚠️</span>
+      <div>
+        <strong>注意：搜索结果会直接显示概念名称（剧透）。建议先读完故事再来查阅。</strong>
+        <br />
+        Search results show concept names — spoilers ahead. Read the stories first for the full learning experience.
+      </div>
+    </div>
+
+    <div class="search-container">
+      <Search />
+    </div>
+  </div>
+</Base>
+
+<style>
+  .search-page {
+    padding-top: 1rem;
+  }
+
+  .search-header {
+    margin-bottom: 1.5rem;
+  }
+
+  .search-header h1 {
+    margin: 0 0 0.25rem;
+  }
+
+  .search-subtitle {
+    color: var(--muted);
+    margin: 0;
+    font-size: 1rem;
+  }
+
+  .search-container {
+    margin-top: 2rem;
+  }
+</style>
