@@ -1,0 +1,339 @@
+---
+// Interactive State Space Model demo — rendered only on the arch-ssm story.
+// A scalar SSM:  h_t = Ā·h_{t-1} + B̄·x_t ,  y_t = C·h_t.
+// Lets the reader draw an input sequence, tune retention/gain, step the
+// recurrence in time, and overlay the convolution kernel k_i = C·Āⁱ·B̄ to see
+// that "sequential recurrence" and "parallel convolution" are one model.
+---
+
+<section class="ssm" id="ssm-demo" aria-label="State Space Model 互动演示">
+  <div class="deepread-head"><span>互动演示 · See it work</span><span class="line"></span></div>
+
+  <p class="ssm-intro">
+    一个最小的状态空间模型：隐状态 <b>h</b> 只有一个数。它把<strong>整段输入历史</strong>压进这一个固定大小的值里——
+    新输入按 <b>B̄</b> 注入，旧记忆每步按 <b>Ā</b> 衰减，输出 <b>y = C·h</b>。
+    在<em>输入</em>轨道上点击/拖动来放置脉冲，调下面的滑块，按 ▶ 让递推一步步跑起来。
+  </p>
+
+  <div class="ssm-eq" id="ssm-eq">
+    h<sub>t</sub> = Ā·h<sub>t−1</sub> + B̄·x<sub>t</sub>
+  </div>
+
+  <div class="ssm-canvas-wrap">
+    <canvas id="ssm-canvas"></canvas>
+  </div>
+
+  <div class="ssm-controls">
+    <label class="ssm-ctl">
+      <span>记忆保留 Ā <i id="ssm-av">0.85</i></span>
+      <input type="range" id="ssm-a" min="0" max="0.98" step="0.01" value="0.85" />
+    </label>
+    <label class="ssm-ctl">
+      <span>输入增益 B̄ <i id="ssm-bv">1.0</i></span>
+      <input type="range" id="ssm-b" min="0.1" max="2" step="0.1" value="1" />
+    </label>
+    <label class="ssm-ctl">
+      <span>输出增益 C <i id="ssm-cv">1.0</i></span>
+      <input type="range" id="ssm-c" min="0.1" max="2" step="0.1" value="1" />
+    </label>
+  </div>
+
+  <div class="ssm-row">
+    <div class="ssm-presets" role="group" aria-label="输入预设">
+      <span class="ssm-lab">输入</span>
+      <button class="ssm-chip" data-preset="impulse">单脉冲</button>
+      <button class="ssm-chip" data-preset="double">两个脉冲</button>
+      <button class="ssm-chip" data-preset="step">阶跃</button>
+      <button class="ssm-chip" data-preset="random">随机</button>
+      <button class="ssm-chip" data-preset="clear">清空</button>
+    </div>
+    <div class="ssm-actions">
+      <label class="ssm-toggle"><input type="checkbox" id="ssm-kernel" /> 显示卷积核（并行视角）</label>
+      <button class="ssm-play" id="ssm-play">▶ 播放递推</button>
+    </div>
+  </div>
+
+  <p class="ssm-note" id="ssm-note">
+    试试把「记忆保留 Ā」拉到接近 1：一个脉冲的影响会拖很长——这就是 SSM 记住远处历史的方式；拉到 0，它就只看当下。
+  </p>
+</section>
+
+<style>
+  .ssm { margin-top: 1.8rem; }
+  .ssm .deepread-head {
+    display: flex; align-items: center; gap: 0.8rem; margin: 0 0 0.9rem;
+    font-family: var(--sans); font-size: 0.66rem; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--cool-soft);
+  }
+  .ssm .deepread-head .line { flex: 1; height: 1px; background: rgba(255, 255, 255, 0.14); }
+  .ssm-intro { font-family: var(--cjk); font-size: 0.92rem; line-height: 1.75; color: #d9cfbb; margin: 0 0 0.9rem; }
+  .ssm-intro b { color: #f0c674; font-weight: 600; }
+  .ssm-intro strong { color: #eaae84; font-weight: 600; }
+  .ssm-intro em { color: #8fb0c4; font-style: normal; }
+
+  .ssm-eq {
+    font-family: var(--serif); font-size: 1.05rem; color: #e9e0cf; text-align: center;
+    background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.5rem; padding: 0.55rem; margin: 0 0 0.9rem; transition: color 0.15s;
+  }
+  .ssm-eq b { color: #f0c674; }
+  .ssm-eq .hl { color: #f0c674; font-weight: 600; }
+
+  .ssm-canvas-wrap {
+    background: rgba(255, 255, 255, 0.025); border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.6rem; padding: 0.5rem; touch-action: none;
+  }
+  #ssm-canvas { display: block; width: 100%; height: auto; cursor: crosshair; }
+
+  .ssm-controls { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.9rem; margin: 1rem 0 0.6rem; }
+  .ssm-ctl { display: flex; flex-direction: column; gap: 0.3rem; }
+  .ssm-ctl > span {
+    font-family: var(--sans); font-size: 0.72rem; color: #b9c6d2;
+    display: flex; justify-content: space-between; align-items: baseline;
+  }
+  .ssm-ctl i { font-style: normal; color: #f0c674; font-variant-numeric: tabular-nums; }
+  .ssm-ctl input[type="range"] { width: 100%; accent-color: #c08a3e; }
+
+  .ssm-row { display: flex; flex-wrap: wrap; gap: 0.8rem 1rem; align-items: center; justify-content: space-between; margin-top: 0.4rem; }
+  .ssm-presets, .ssm-actions { display: flex; align-items: center; gap: 0.45rem; flex-wrap: wrap; }
+  .ssm-lab { font-family: var(--sans); font-size: 0.7rem; color: #8fa6b6; text-transform: uppercase; letter-spacing: 0.1em; }
+  .ssm-chip {
+    font-family: var(--cjk); font-size: 0.8rem; color: #cdd9e2;
+    background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 1.4rem; padding: 0.28rem 0.7rem; cursor: pointer; transition: 0.12s;
+  }
+  .ssm-chip:hover { border-color: #8fb0c4; background: rgba(143, 176, 196, 0.14); }
+  .ssm-toggle { font-family: var(--cjk); font-size: 0.8rem; color: #b9c6d2; display: inline-flex; align-items: center; gap: 0.35rem; cursor: pointer; }
+  .ssm-toggle input { accent-color: #7fb0c8; }
+  .ssm-play {
+    font-family: var(--cjk); font-size: 0.82rem; color: #16212e; font-weight: 600;
+    background: #d8a94e; border: none; border-radius: 1.4rem; padding: 0.34rem 0.95rem; cursor: pointer; transition: 0.12s;
+  }
+  .ssm-play:hover { background: #f0c674; }
+
+  .ssm-note { font-family: var(--cjk); font-size: 0.82rem; line-height: 1.7; color: #9fb0bf; margin: 0.9rem 0 0; }
+
+  @media (max-width: 560px) {
+    .ssm-controls { grid-template-columns: 1fr; }
+  }
+</style>
+
+<script>
+  type Track = { top: number; h: number; label: string };
+
+  function initSsm(): void {
+    const root = document.getElementById('ssm-demo');
+    const canvas = document.getElementById('ssm-canvas') as HTMLCanvasElement | null;
+    if (!root || !canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const L = 40;
+    let input = new Float64Array(L);
+    let Abar = 0.85, Bbar = 1.0, C = 1.0;
+    let showKernel = false;
+    let playing = false;
+    let tHead = L - 1; // animation head; full when idle
+    let raf = 0, lastStep = 0;
+
+    const COL = {
+      grid: 'rgba(255,255,255,0.06)',
+      axis: 'rgba(255,255,255,0.16)',
+      text: '#9fb0bf',
+      input: '#8fb0c4',
+      state: '#d8a94e',
+      output: '#eaae84',
+      marker: '#f0c674',
+      kernel: '#7fb0c8',
+    };
+
+    const $ = (id: string) => document.getElementById(id);
+    const aEl = $('ssm-a') as HTMLInputElement, bEl = $('ssm-b') as HTMLInputElement, cEl = $('ssm-c') as HTMLInputElement;
+    const aV = $('ssm-av')!, bV = $('ssm-bv')!, cV = $('ssm-cv')!;
+    const eqEl = $('ssm-eq')!, playBtn = $('ssm-play') as HTMLButtonElement, kernelEl = $('ssm-kernel') as HTMLInputElement;
+
+    function preset(kind: string): void {
+      input = new Float64Array(L);
+      if (kind === 'impulse') input[6] = 1;
+      else if (kind === 'double') { input[6] = 1; input[20] = 1; }
+      else if (kind === 'step') { for (let i = 8; i < L; i++) input[i] = 1; }
+      else if (kind === 'random') { for (let i = 0; i < L; i++) if (Math.abs(Math.sin(i * 12.9898) * 43758.5) % 1 > 0.78) input[i] = 0.5 + (i % 3) * 0.25; }
+      // 'clear' leaves zeros
+    }
+    preset('impulse');
+
+    function compute(): { h: Float64Array; y: Float64Array; ker: Float64Array } {
+      const h = new Float64Array(L), y = new Float64Array(L), ker = new Float64Array(L);
+      let prev = 0;
+      for (let t = 0; t < L; t++) { const cur = Abar * prev + Bbar * input[t]; h[t] = cur; y[t] = C * cur; prev = cur; }
+      let g = Bbar; for (let i = 0; i < L; i++) { ker[i] = C * g; g *= Abar; } // k_i = C·Āⁱ·B̄
+      return { h, y, ker };
+    }
+
+    // ── layout / geometry ─────────────────────────────────────
+    let W = 600, H = 330, dpr = 1;
+    const padL = 30, padR = 12, padT = 8, padB = 18, gap = 14;
+    function tracks(): Track[] {
+      const labels = showKernel ? ['输入 xₜ', '隐状态 hₜ', '输出 yₜ', '卷积核 kᵢ'] : ['输入 xₜ', '隐状态 hₜ', '输出 yₜ'];
+      const n = labels.length;
+      const usable = H - padT - padB - gap * (n - 1);
+      const th = usable / n;
+      return labels.map((label, i) => ({ label, top: padT + i * (th + gap), h: th }));
+    }
+    function xAt(i: number): number { return padL + (i / (L - 1)) * (W - padL - padR); }
+
+    function resize(): void {
+      const cssW = (canvas!.parentElement as HTMLElement).clientWidth - 16; // minus wrap padding
+      if (cssW <= 0) return;
+      W = cssW;
+      H = showKernel ? 420 : 330;
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas!.width = Math.round(W * dpr);
+      canvas!.height = Math.round(H * dpr);
+      canvas!.style.height = H + 'px';
+      ctx!.setTransform(dpr, 0, 0, dpr, 0, 0);
+      draw();
+    }
+
+    function drawTrack(tr: Track, data: Float64Array, kind: 'stem' | 'area' | 'line' | 'bars', color: string, headClip: number): void {
+      const { top, h, label } = tr;
+      const baseY = top + h - 2;
+      // label
+      ctx!.fillStyle = COL.text;
+      ctx!.font = '11px ui-sans-serif, system-ui, sans-serif';
+      ctx!.textAlign = 'left';
+      ctx!.fillText(label, padL, top + 10);
+      // baseline
+      ctx!.strokeStyle = COL.axis;
+      ctx!.lineWidth = 1;
+      ctx!.beginPath(); ctx!.moveTo(padL, baseY); ctx!.lineTo(W - padR, baseY); ctx!.stroke();
+
+      let max = 1e-6; for (let i = 0; i < L; i++) max = Math.max(max, Math.abs(data[i]));
+      const top2 = top + 16;
+      const scale = (baseY - top2) / max;
+      const yAt = (v: number) => baseY - v * scale;
+
+      if (kind === 'stem' || kind === 'bars') {
+        for (let i = 0; i < L; i++) {
+          if (data[i] === 0) continue;
+          const x = xAt(i), yv = yAt(data[i]);
+          ctx!.strokeStyle = color; ctx!.lineWidth = kind === 'bars' ? 3 : 2;
+          ctx!.beginPath(); ctx!.moveTo(x, baseY); ctx!.lineTo(x, yv); ctx!.stroke();
+          if (kind === 'stem') { ctx!.fillStyle = color; ctx!.beginPath(); ctx!.arc(x, yv, 2.6, 0, 7); ctx!.fill(); }
+        }
+      } else if (kind === 'area') {
+        ctx!.beginPath();
+        ctx!.moveTo(xAt(0), baseY);
+        for (let i = 0; i <= headClip; i++) ctx!.lineTo(xAt(i), yAt(data[i]));
+        ctx!.lineTo(xAt(headClip), baseY); ctx!.closePath();
+        const grad = ctx!.createLinearGradient(0, top2, 0, baseY);
+        grad.addColorStop(0, color + '88'); grad.addColorStop(1, color + '10');
+        ctx!.fillStyle = grad; ctx!.fill();
+        ctx!.strokeStyle = color; ctx!.lineWidth = 1.6;
+        ctx!.beginPath();
+        for (let i = 0; i <= headClip; i++) { const x = xAt(i), yv = yAt(data[i]); i === 0 ? ctx!.moveTo(x, yv) : ctx!.lineTo(x, yv); }
+        ctx!.stroke();
+      } else { // line
+        ctx!.strokeStyle = color; ctx!.lineWidth = 1.8;
+        ctx!.beginPath();
+        for (let i = 0; i <= headClip; i++) { const x = xAt(i), yv = yAt(data[i]); i === 0 ? ctx!.moveTo(x, yv) : ctx!.lineTo(x, yv); }
+        ctx!.stroke();
+      }
+    }
+
+    function draw(): void {
+      if (W <= 0) return;
+      const { h, y, ker } = compute();
+      ctx!.clearRect(0, 0, W, H);
+      const tr = tracks();
+      const headClip = playing ? tHead : L - 1;
+
+      drawTrack(tr[0], input, 'stem', COL.input, L - 1);
+      drawTrack(tr[1], h, 'area', COL.state, headClip);
+      drawTrack(tr[2], y, 'line', COL.output, headClip);
+      if (showKernel && tr[3]) drawTrack(tr[3], ker, 'bars', COL.kernel, L - 1);
+
+      // time-head marker across input/state/output during playback
+      if (playing) {
+        const x = xAt(tHead);
+        const yTop = tr[0].top + 14, yBot = tr[2].top + tr[2].h - 2;
+        ctx!.strokeStyle = COL.marker; ctx!.lineWidth = 1; ctx!.setLineDash([3, 3]);
+        ctx!.beginPath(); ctx!.moveTo(x, yTop); ctx!.lineTo(x, yBot); ctx!.stroke();
+        ctx!.setLineDash([]);
+      }
+      updateEq(h, headClip);
+    }
+
+    function fmt(v: number): string { return (Math.round(v * 100) / 100).toString(); }
+    function updateEq(h: Float64Array, t: number): void {
+      if (playing) {
+        const prev = t > 0 ? h[t - 1] : 0;
+        eqEl.innerHTML =
+          `h<sub>${t}</sub> = <b>${fmt(Abar)}</b>·<span class="hl">${fmt(prev)}</span> + <b>${fmt(Bbar)}</b>·<span class="hl">${fmt(input[t])}</span> = <span class="hl">${fmt(h[t])}</span>`;
+      } else {
+        eqEl.innerHTML = `h<sub>t</sub> = <b>Ā</b>·h<sub>t−1</sub> + <b>B̄</b>·x<sub>t</sub>　·　y<sub>t</sub> = <b>C</b>·h<sub>t</sub>`;
+      }
+    }
+
+    // ── playback ──────────────────────────────────────────────
+    function tick(ts: number): void {
+      if (!playing) return;
+      if (ts - lastStep > 110) { lastStep = ts; tHead++; if (tHead >= L) { tHead = 0; } draw(); }
+      raf = requestAnimationFrame(tick);
+    }
+    function setPlaying(on: boolean): void {
+      playing = on;
+      playBtn.textContent = on ? '⏸ 暂停' : '▶ 播放递推';
+      if (on) { tHead = 0; lastStep = 0; raf = requestAnimationFrame(tick); }
+      else { cancelAnimationFrame(raf); draw(); }
+    }
+
+    // ── input drawing on the canvas ───────────────────────────
+    let painting = false, paintVal = 1;
+    function cellFromEvent(e: PointerEvent): number | null {
+      const rect = canvas!.getBoundingClientRect();
+      const px = e.clientX - rect.left, py = e.clientY - rect.top;
+      const tr = tracks();
+      if (py < tr[0].top || py > tr[0].top + tr[0].h) return null; // only the input track
+      const i = Math.round(((px - padL) / (W - padL - padR)) * (L - 1));
+      return i >= 0 && i < L ? i : null;
+    }
+    canvas.addEventListener('pointerdown', (e) => {
+      const i = cellFromEvent(e); if (i == null) return;
+      painting = true; paintVal = input[i] > 0 ? 0 : 1; input[i] = paintVal;
+      canvas!.setPointerCapture(e.pointerId); draw();
+    });
+    canvas.addEventListener('pointermove', (e) => {
+      if (!painting) return;
+      const i = cellFromEvent(e); if (i == null) return;
+      input[i] = paintVal; draw();
+    });
+    const endPaint = () => { painting = false; };
+    canvas.addEventListener('pointerup', endPaint);
+    canvas.addEventListener('pointercancel', endPaint);
+
+    // ── wiring ────────────────────────────────────────────────
+    aEl.addEventListener('input', () => { Abar = +aEl.value; aV.textContent = Abar.toFixed(2); draw(); });
+    bEl.addEventListener('input', () => { Bbar = +bEl.value; bV.textContent = Bbar.toFixed(1); draw(); });
+    cEl.addEventListener('input', () => { C = +cEl.value; cV.textContent = C.toFixed(1); draw(); });
+    kernelEl.addEventListener('change', () => { showKernel = kernelEl.checked; resize(); });
+    playBtn.addEventListener('click', () => setPlaying(!playing));
+    root.querySelectorAll<HTMLButtonElement>('.ssm-chip').forEach((b) =>
+      b.addEventListener('click', () => { preset(b.dataset.preset!); if (playing) setPlaying(false); draw(); }),
+    );
+
+    // The concept panel starts hidden (width 0). ResizeObserver alone proved
+    // unreliable for the display:none → visible transition, so poll with rAF for
+    // the first layout, then hand off to the observer for later resizes.
+    const ro = new ResizeObserver(() => resize());
+    ro.observe(canvas.parentElement as HTMLElement);
+    function firstDraw(): void {
+      if ((canvas!.parentElement as HTMLElement).clientWidth > 0) resize();
+      else requestAnimationFrame(firstDraw);
+    }
+    firstDraw();
+  }
+
+  if (document.readyState !== 'loading') initSsm();
+  else document.addEventListener('DOMContentLoaded', initSsm);
+</script>

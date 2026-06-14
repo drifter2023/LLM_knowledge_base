@@ -8,6 +8,7 @@ import { buildGuesses, buildBridge, buildRelated, type SiblingConcept } from '..
 import digests from '../../../data/digests.json';
 import conceptZh from '../../../data/concept-zh.json';
 import refTitles from '../../../data/ref-titles.json';
+import SsmDemo from '../../../components/SsmDemo.astro';
 import Base from '../../../layouts/Base.astro';
 import 'katex/dist/katex.min.css';
 
@@ -135,6 +136,8 @@ const askContext = {
             </div>
           ))}
         </div>
+
+        {conceptId === 'arch-ssm' && <SsmDemo />}
 
         <div class="deepread-head"><span>英文精读 · Deep Read</span><span class="line"></span></div>
         <div class="essay-en" set:html={deepReadHtml} />
